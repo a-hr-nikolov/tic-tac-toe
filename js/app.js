@@ -1,4 +1,5 @@
 const gameContainer = document.querySelector('.game-container');
+
 const gameBoard = (boardSizeString => {
   let boardSize = boardSizeString;
   let boardCells = [];
@@ -17,10 +18,20 @@ const gameBoard = (boardSizeString => {
   }
 
   function placeSymbol(event) {
-    event.target.textContent = 'x';
+    event.target.textContent = determineSymbol();
   }
 
   return { createBoard };
 })('3x3');
 
 gameBoard.createBoard();
+
+function createPlayer(name, symbol) {
+  const playerName = name;
+  const playerSymbol = symbol;
+
+  const getName = () => playerName;
+  const getSymbol = () => playerSymbol;
+
+  return { getName, getSymbol };
+}

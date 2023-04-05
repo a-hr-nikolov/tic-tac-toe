@@ -9,6 +9,20 @@ const displayController = (() => {
     turnSwitch = !turnSwitch;
   }
 
+  function checkWinCondition() {
+    for (let i = 0; i < Math.sqrt(inputArray.length); i++) {
+      if (
+        (inputArray[i].textContent === inputArray[i + 1].textContent &&
+          inputArray[i].textContent === inputArray[i + 2].textContent) ||
+        (inputArray[i].textContent === inputArray[i + 3].textContent &&
+          inputArray[i].textContent === inputArray[i + 6].textContent)
+      ) {
+      }
+    }
+  }
+
+  function onClick() {}
+
   return { placeSymbol };
 })();
 

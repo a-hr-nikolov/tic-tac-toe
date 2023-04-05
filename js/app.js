@@ -1,6 +1,18 @@
 const gameContainer = document.querySelector('.game-container');
 
-const gameBoard = (boardSizeString => {
+const displayController = (() => {
+  let turnSwitch = true;
+
+  function placeSymbol(event) {
+    if (turnSwitch) event.target.textContent = 'X';
+    else event.target.textContent = 'O';
+    turnSwitch = !turnSwitch;
+  }
+
+  return { placeSymbol };
+})();
+
+const gameBoard = ((boardSizeString, handleClick) => {
   let boardSize = boardSizeString;
   let boardCells = [];
 
@@ -12,17 +24,13 @@ const gameBoard = (boardSizeString => {
     for (let i = 0; i < getBoardSize() ** 2; i++) {
       boardCells[i] = document.createElement('div');
       boardCells[i].classList.add('cell');
-      boardCells[i].addEventListener('click', placeSymbol);
+      boardCells[i].addEventListener('click', handleClick);
       gameContainer.appendChild(boardCells[i]);
     }
   }
 
-  function placeSymbol(event) {
-    event.target.textContent = determineSymbol();
-  }
-
   return { createBoard };
-})('3x3');
+})('3x3', displayController.placeSymbol);
 
 gameBoard.createBoard();
 
@@ -35,3 +43,11 @@ function createPlayer(name, symbol) {
 
   return { getName, getSymbol };
 }
+
+const playerOne = createPlayer('Player One', 'X');
+const playerTwo = createPlayer('Player Two', 'O');
+
+// TODO:
+// Make it possible to input player name or select symbols
+
+// Place 'handleClick' argument within the gameBoard IIFE

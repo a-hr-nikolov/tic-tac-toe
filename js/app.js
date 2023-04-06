@@ -30,6 +30,8 @@ const gameBoard = ((boardSizeString, handleClick) => {
   let boardSize = boardSizeString;
   let boardCells = [];
 
+  createBoard();
+
   function getBoardSize() {
     return +boardSize.match(/^\d/);
   }
@@ -43,10 +45,12 @@ const gameBoard = ((boardSizeString, handleClick) => {
     }
   }
 
-  return { createBoard };
-})('3x3', displayController.placeSymbol);
+  function getBoardState() {
+    return [...boardCells];
+  }
 
-gameBoard.createBoard();
+  return { getBoardState };
+})('3x3', displayController.placeSymbol);
 
 function createPlayer(name, symbol) {
   const playerName = name;

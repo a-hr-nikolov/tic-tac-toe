@@ -70,6 +70,28 @@ const displayController = (() => {
         console.log(`${boardState[0]} wins`);
       }
     })();
+
+    // Check secondary diagonal
+    (function () {
+      let flagWin = true;
+
+      // The initial i is initialized like that for math reasons.
+      // The condition should actually be something like:
+      // grid size - (row size - 1), but it will always work with -1 alone.
+      for (
+        let i = Math.sqrt(boardState.length) * 2 - 2;
+        i < boardState.length - 1;
+        i += Math.sqrt(boardState.length) - 1
+      ) {
+        if (boardState[Math.sqrt(boardState.length) - 1] !== boardState[i]) {
+          flagWin = false;
+          break;
+        }
+      }
+      if (flagWin === true) {
+        console.log(`${boardState[Math.sqrt(boardState.length) - 1]} wins`);
+      }
+    })();
   }
 
   function onClick(event) {
@@ -123,3 +145,7 @@ const playerTwo = createPlayer('Player Two', 'O');
 // Make it possible to input player name or select symbols
 
 // Place 'handleClick' argument within the gameBoard IIFE
+
+// Cells shouldn't be overwritable.
+
+// Event Listeners need to be turned off if there's a winner.

@@ -10,20 +10,33 @@ const displayController = (() => {
   }
 
   function checkWinCondition() {
-    for (let i = 0; i < Math.sqrt(inputArray.length); i++) {
-      if (
-        (inputArray[i].textContent === inputArray[i + 1].textContent &&
-          inputArray[i].textContent === inputArray[i + 2].textContent) ||
-        (inputArray[i].textContent === inputArray[i + 3].textContent &&
-          inputArray[i].textContent === inputArray[i + 6].textContent)
-      ) {
+    const boardState = gameBoard
+      .getBoardState()
+      .map(item => item.textContent)
+      .map((item, i) => {
+        if (item === '') return (item = i);
+        else return item;
+      });
+    console.log(boardState);
+
+    // Check rows
+    for (let i = 0; i < boardState.length; i += Math.sqrt(boardState.length)) {
+      let flagWin = true;
+      for (let j = i + 1; j < Math.sqrt(boardState.length) + i; j++) {
+        if (boardState[i] !== boardState[j]) return (flagWin = false);
+      }
+      if (flagWin === true) {
+        return alert('Someone Wins');
       }
     }
   }
 
-  function onClick() {}
+  function onClick(event) {
+    placeSymbol(event);
+    checkWinCondition();
+  }
 
-  return { placeSymbol };
+  return { onClick };
 })();
 
 const gameBoard = ((boardSizeString, handleClick) => {
@@ -50,7 +63,7 @@ const gameBoard = ((boardSizeString, handleClick) => {
   }
 
   return { getBoardState };
-})('3x3', displayController.placeSymbol);
+})('3x3', displayController.onClick);
 
 function createPlayer(name, symbol) {
   const playerName = name;

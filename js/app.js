@@ -29,7 +29,26 @@ const displayController = (() => {
         }
       }
       if (flagWin === true) {
-        console.log('Someone Wins');
+        console.log(`${boardState[i]} wins`);
+        break;
+      }
+    }
+
+    // Check columns
+    for (let i = 0; i < Math.sqrt(boardState.length); i++) {
+      let flagWin = true;
+      for (
+        let j = i + Math.sqrt(boardState.length);
+        j < boardState.length;
+        j += Math.sqrt(boardState.length)
+      ) {
+        if (boardState[i] !== boardState[j]) {
+          flagWin = false;
+          break;
+        }
+      }
+      if (flagWin === true) {
+        console.log(`${boardState[i]} wins`);
         break;
       }
     }

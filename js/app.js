@@ -52,6 +52,24 @@ const displayController = (() => {
         break;
       }
     }
+
+    // Check main diagonal
+    (function () {
+      let flagWin = true;
+      for (
+        let i = Math.sqrt(boardState.length) + 1;
+        i < boardState.length;
+        i += Math.sqrt(boardState.length) + 1
+      ) {
+        if (boardState[0] !== boardState[i]) {
+          flagWin = false;
+          break;
+        }
+      }
+      if (flagWin === true) {
+        console.log(`${boardState[0]} wins`);
+      }
+    })();
   }
 
   function onClick(event) {

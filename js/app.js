@@ -23,10 +23,14 @@ const displayController = (() => {
     for (let i = 0; i < boardState.length; i += Math.sqrt(boardState.length)) {
       let flagWin = true;
       for (let j = i + 1; j < Math.sqrt(boardState.length) + i; j++) {
-        if (boardState[i] !== boardState[j]) return (flagWin = false);
+        if (boardState[i] !== boardState[j]) {
+          flagWin = false;
+          break;
+        }
       }
       if (flagWin === true) {
-        return alert('Someone Wins');
+        console.log('Someone Wins');
+        break;
       }
     }
   }

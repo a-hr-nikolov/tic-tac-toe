@@ -1,4 +1,5 @@
 const gameContainer = document.querySelector('.game-container');
+const resultsDisplay = document.querySelector('.results');
 
 const displayController = (() => {
   let turnSwitch = true;
@@ -29,7 +30,7 @@ const displayController = (() => {
         }
       }
       if (flagWin === true) {
-        console.log(`${boardState[i]} wins`);
+        resultsDisplay.textContent = `${boardState[i]} wins`;
         break;
       }
     }
@@ -48,7 +49,7 @@ const displayController = (() => {
         }
       }
       if (flagWin === true) {
-        console.log(`${boardState[i]} wins`);
+        resultsDisplay.textContent = `${boardState[i]} wins`;
         break;
       }
     }
@@ -67,7 +68,7 @@ const displayController = (() => {
         }
       }
       if (flagWin === true) {
-        console.log(`${boardState[0]} wins`);
+        resultsDisplay.textContent = `${boardState[0]} wins`;
       }
     })();
 
@@ -76,8 +77,8 @@ const displayController = (() => {
       let flagWin = true;
 
       // The initial i is initialized like that for math reasons.
-      // The condition should actually be something like:
-      // grid size - (row size - 1), but it will always work with -1 alone.
+      // The condition is grid size - 1 to avoid the last cell of the grid
+      // passing the condition.
       for (
         let i = Math.sqrt(boardState.length) * 2 - 2;
         i < boardState.length - 1;
@@ -88,8 +89,11 @@ const displayController = (() => {
           break;
         }
       }
+
       if (flagWin === true) {
-        console.log(`${boardState[Math.sqrt(boardState.length) - 1]} wins`);
+        resultsDisplay.textContent = `${
+          boardState[Math.sqrt(boardState.length) - 1]
+        } wins`;
       }
     })();
   }

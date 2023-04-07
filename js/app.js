@@ -3,13 +3,83 @@ const resultsDisplay = document.querySelector('.results');
 
 gameContainer.style.height = getComputedStyle(gameContainer).width;
 
+const gameBoard = (boardSizeString => {
+  /* 
+  
+  After some deliberation on whether to completely separate concerns between a display
+  component and a board state component, I decided that I can sacrifice a bit of that
+  separation to make sure that performance is better. 
+  
+  This is why instead of creating an object that simply holds the contents of the board 
+  cells (i.e. the state), it can instead hold the 'cells' themselves - the divs that 
+  will be placed in the DOM.
+  
+  While this doesn't save us the trouble of repopulating the DOM on every change, it
+  spares us having to redeclare and reinitialize the divs themselves. This should count
+  for something.
+
+  On a similar note, I now understand one aspect of what makes React so powerful.
+  
+  */
+
+  let boardSize = boardSizeString;
+  let boardCells = [];
+
+  (function initBoardState() {
+    boardCells = [];
+    for (let i = 0; i < getBoardSize() ** 2; i++) {
+      boardCells[i] = document.createElement('div');
+      boardCells[i].classList.add('cell');
+      boardCells[i].setAttribute('data-index', `${i}`);
+    }
+  })();
+
+  function getBoardSize() {
+    return +boardSize.match(/^\d/);
+  }
+
+  function getBoardState() {
+    return boardCells;
+  }
+
+  /*
+
+  Here I again had to decide how to treat separation of concerns. I figured
+  it is best if I handle the changing of board state from within the gameBoard
+  object itself.
+
+  */
+
+  function setBoardCell(index, mark) {
+    if (boardCells[index].textContent !== '') return;
+    boardCells[index].textContent = mark;
+  }
+
+  return { getBoardState, setBoardCell };
+})('3x3');
+
 const displayController = (() => {
   let turnSwitch = true;
 
-  function placeSymbol(event) {
-    if (event.target.textContent !== '') return;
-    if (turnSwitch) event.target.textContent = 'X';
-    else event.target.textContent = 'O';
+  (function createBoard() {
+    let board = gameBoard.getBoardState();
+
+    for (let i = 0; i < board ** 2; i++) {
+      board[i].addEventListener('click', handleClick);
+      gameContainer.appendChild(board[i]);
+    }
+  })();
+
+  function placeSymbol({ target }) {
+    if (target.textContent !== '') return;
+
+    let mark = null;
+    if (turnSwitch) mark = 'X';
+    else mark = 'O';
+
+    const cellIndex = +target.getAttribute('data-index');
+    gameBoard.setBoardCell(cellIndex, mark);
+
     turnSwitch = !turnSwitch;
   }
 
@@ -109,38 +179,6 @@ const displayController = (() => {
 
   return { onClick };
 })();
-
-const gameBoard = ((boardSizeString, handleClick) => {
-  let boardSize = boardSizeString;
-  let boardCells = [];
-  let gameWinner = null;
-
-  (function initBoardState() {
-    boardCells = [];
-    for (let i = 0; i < getBoardSize() ** 2; i++) {
-      boardCells[i] = { mark: '' };
-    }
-  })();
-
-  function getBoardSize() {
-    return +boardSize.match(/^\d/);
-  }
-
-  (function createBoard() {
-    for (let i = 0; i < getBoardSize() ** 2; i++) {
-      boardCells[i] = document.createElement('div');
-      boardCells[i].classList.add('cell');
-      boardCells[i].addEventListener('click', handleClick);
-      gameContainer.appendChild(boardCells[i]);
-    }
-  })();
-
-  function getBoardState() {
-    return [...boardCells];
-  }
-
-  return { getBoardState };
-})('3x3', displayController.onClick);
 
 function createPlayer(name, symbol) {
   const playerName = name;

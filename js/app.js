@@ -113,6 +113,14 @@ const displayController = (() => {
 const gameBoard = ((boardSizeString, handleClick) => {
   let boardSize = boardSizeString;
   let boardCells = [];
+  let gameWinner = null;
+
+  (function initBoardState() {
+    boardCells = [];
+    for (let i = 0; i < getBoardSize() ** 2; i++) {
+      boardCells[i] = { mark: '' };
+    }
+  })();
 
   function getBoardSize() {
     return +boardSize.match(/^\d/);

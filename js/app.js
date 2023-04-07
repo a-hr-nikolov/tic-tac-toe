@@ -8,7 +8,7 @@ const gameBoard = (boardSizeString => {
   
   After some deliberation on whether to completely separate concerns between a display
   component and a board state component, I decided that I can sacrifice a bit of that
-  separation to make sure that performance is better. 
+  separation for better performance. It felt right to me.
   
   This is why instead of creating an object that simply holds the contents of the board 
   cells (i.e. the state), it can instead hold the 'cells' themselves - the divs that 
@@ -18,7 +18,10 @@ const gameBoard = (boardSizeString => {
   spares us having to redeclare and reinitialize the divs themselves. This should count
   for something.
 
-  On a similar note, I now understand one aspect of what makes React so powerful.
+  On a similar note, I now understand one aspect of what makes React so powerful. If I
+  rewrite this in React, I can actually have separation of concerns AND the performance
+  will be the same or better, because of the virtual DOM, as it wouldn't cause unnecessary
+  re-renders.
   
   */
 
@@ -173,6 +176,14 @@ const displayController = (() => {
         } wins`;
       }
     })();
+
+    // Check full board with no winner
+    if (
+      boardState.every(item => /[XO]/.test(item)) &&
+      resultsDisplay.textContent === ''
+    ) {
+      resultsDisplay.textContent = "It's A DRAWWWWWW";
+    }
   }
 
   function onClick(event) {
@@ -199,13 +210,14 @@ const playerTwo = createPlayer('Player Two', 'O');
 // TODO:
 // Make it possible to input player name or select symbols
 
-// Place 'handleClick' argument within the gameBoard IIFE
-
 // Event Listeners need to be turned off if there's a winner.
 
 // Logic to check for a full board and return a tie, if no winner
 
 // include a button to start/restart
+
+// refactor checkWinCondition to return what should be displayed, but not affecting
+// the display. The display should be handled by a different function
 
 // Include grid size adjuster
 

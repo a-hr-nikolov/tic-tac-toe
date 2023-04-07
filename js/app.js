@@ -5,12 +5,15 @@ const displayController = (() => {
   let turnSwitch = true;
 
   function placeSymbol(event) {
+    if (event.target.textContent !== '') return;
     if (turnSwitch) event.target.textContent = 'X';
     else event.target.textContent = 'O';
     turnSwitch = !turnSwitch;
   }
 
   function checkWinCondition() {
+    // I map the empty cells to avoid checking for empty strings
+    // throughout the function
     const boardState = gameBoard
       .getBoardState()
       .map(item => item.textContent)
@@ -18,7 +21,6 @@ const displayController = (() => {
         if (item === '') return (item = i);
         else return item;
       });
-    console.log(boardState);
 
     // Check rows
     for (let i = 0; i < boardState.length; i += Math.sqrt(boardState.length)) {
@@ -110,20 +112,18 @@ const gameBoard = ((boardSizeString, handleClick) => {
   let boardSize = boardSizeString;
   let boardCells = [];
 
-  createBoard();
-
   function getBoardSize() {
     return +boardSize.match(/^\d/);
   }
 
-  function createBoard() {
+  (function createBoard() {
     for (let i = 0; i < getBoardSize() ** 2; i++) {
       boardCells[i] = document.createElement('div');
       boardCells[i].classList.add('cell');
       boardCells[i].addEventListener('click', handleClick);
       gameContainer.appendChild(boardCells[i]);
     }
-  }
+  })();
 
   function getBoardState() {
     return [...boardCells];
@@ -153,3 +153,21 @@ const playerTwo = createPlayer('Player Two', 'O');
 // Cells shouldn't be overwritable.
 
 // Event Listeners need to be turned off if there's a winner.
+
+// Logic to check for a full board and return a tie, if no winner
+
+// include a button to start/restart
+
+// Include grid size adjuster
+
+// Have a Game Controller to handle the Logic, and Display Controller to display without happens
+// The GameBoard object should only have an array of elements, it probably shouldn't be used to handle the display
+// of said elements.
+
+// Add a DOM Grabbing module
+
+/* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
+Start by just getting the computer to make a random legal move.
+Once you’ve gotten that, work on making the computer smart. It is possible to create an unbeatable AI using the minimax algorithm (read about it here, some googling will help you out with this one)
+If you get this running definitely come show it off in the chatroom. It’s quite an accomplishment!
+ */

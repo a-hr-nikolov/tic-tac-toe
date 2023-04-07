@@ -150,8 +150,6 @@ const playerTwo = createPlayer('Player Two', 'O');
 
 // Place 'handleClick' argument within the gameBoard IIFE
 
-// Cells shouldn't be overwritable.
-
 // Event Listeners need to be turned off if there's a winner.
 
 // Logic to check for a full board and return a tie, if no winner

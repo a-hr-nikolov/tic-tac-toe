@@ -1,6 +1,8 @@
 const gameContainer = document.querySelector('.game-container');
 const resultsDisplay = document.querySelector('.results');
 
+gameContainer.style.height = getComputedStyle(gameContainer).width;
+
 const displayController = (() => {
   let turnSwitch = true;
 

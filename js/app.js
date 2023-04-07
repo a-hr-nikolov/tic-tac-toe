@@ -62,10 +62,13 @@ const displayController = (() => {
   let turnSwitch = true;
 
   (function createBoard() {
-    let board = gameBoard.getBoardState();
+    gameContainer.textContent = '';
 
-    for (let i = 0; i < board ** 2; i++) {
-      board[i].addEventListener('click', handleClick);
+    let board = gameBoard.getBoardState();
+    console.log(board);
+
+    for (let i = 0; i < board.length; i++) {
+      board[i].addEventListener('click', onClick);
       gameContainer.appendChild(board[i]);
     }
   })();

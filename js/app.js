@@ -178,10 +178,7 @@ const displayController = (() => {
     })();
 
     // Check full board with no winner
-    if (
-      boardState.every(item => /[XO]/.test(item)) &&
-      resultsDisplay.textContent === ''
-    ) {
+    if (boardState.every(item => /[XO]/.test(item))) {
       resultsDisplay.textContent = "It's A DRAWWWWWW";
     }
   }

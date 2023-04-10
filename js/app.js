@@ -113,10 +113,7 @@ const displayController = ((gameContainer, resultsDisplay) => {
           break;
         }
       }
-      if (flagWin === true) {
-        resultsDisplay.textContent = `${boardState[i]} wins`;
-        break;
-      }
+      if (flagWin === true) return boardState[i];
     }
 
     // Check columns
@@ -132,14 +129,11 @@ const displayController = ((gameContainer, resultsDisplay) => {
           break;
         }
       }
-      if (flagWin === true) {
-        resultsDisplay.textContent = `${boardState[i]} wins`;
-        break;
-      }
+      if (flagWin === true) return boardState[i];
     }
 
     // Check main diagonal
-    (function () {
+    {
       let flagWin = true;
       for (
         let i = Math.sqrt(boardState.length) + 1;
@@ -147,17 +141,20 @@ const displayController = ((gameContainer, resultsDisplay) => {
         i += Math.sqrt(boardState.length) + 1
       ) {
         if (boardState[0] !== boardState[i]) {
+          console.log(boardState[0]);
+          console.log('This is ' + boardState[i]);
+          boardState[0] !== boardState[i];
           flagWin = false;
           break;
         }
       }
       if (flagWin === true) {
-        resultsDisplay.textContent = `${boardState[0]} wins`;
+        return boardState[0];
       }
-    })();
+    }
 
     // Check secondary diagonal
-    (function () {
+    {
       let flagWin = true;
 
       // The initial i is initialized like that for math reasons.
@@ -174,22 +171,25 @@ const displayController = ((gameContainer, resultsDisplay) => {
         }
       }
 
-      if (flagWin === true) {
-        resultsDisplay.textContent = `${
-          boardState[Math.sqrt(boardState.length) - 1]
-        } wins`;
-      }
-    })();
+      if (flagWin === true) return boardState[Math.sqrt(boardState.length) - 1];
+    }
 
     // Check full board with no winner
-    if (boardState.every(item => /[XO]/.test(item))) {
-      resultsDisplay.textContent = "It's A DRAW";
+    if (boardState.every(item => /[XO]/.test(item))) return 'draw';
+  }
+
+  function displayWinner(winnerString) {
+    if (!winnerString) return;
+    if (winnerString === 'draw') {
+      resultsDisplay.textContent = "It's a draw";
+      return;
     }
+    resultsDisplay.textContent = `${winnerString} wins`;
   }
 
   function onClick(event) {
     placeSymbol(event);
-    checkWinCondition();
+    displayWinner(checkWinCondition());
   }
 
   return { onClick };

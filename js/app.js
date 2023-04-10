@@ -1,10 +1,11 @@
 const DOMobj = (function () {
   const gameContainer = document.querySelector('.game-container');
   const resultsDisplay = document.querySelector('.results');
+  const restartBtn = document.querySelector('.restart');
 
   gameContainer.style.height = getComputedStyle(gameContainer).width;
 
-  return { gameContainer, resultsDisplay };
+  return { gameContainer, resultsDisplay, restartBtn };
 })();
 
 const gameBoard = (boardSizeString => {
@@ -65,17 +66,23 @@ const gameBoard = (boardSizeString => {
   return { getBoardState, setBoardCell };
 })('3x3');
 
-const displayController = ((gameContainer, resultsDisplay) => {
+const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
 
-  (function createBoard() {
-    gameContainer.textContent = '';
+  restartBtn.addEventListener('click', restartGame);
 
-    for (let i = 0; i < board.length; i++) {
-      board[i].addEventListener('click', onClick);
-      gameContainer.appendChild(board[i]);
-    }
+  const createBoard = (function createBoard() {
+    turnSwitch = true;
+    gameContainer.textContent = '';
+    board.forEach(item => (item.textContent = ''));
+
+    board.forEach(item => {
+      item.addEventListener('click', onClick);
+      gameContainer.appendChild(item);
+    });
+
+    return createBoard;
   })();
 
   function placeSymbol({ target }) {
@@ -186,9 +193,8 @@ const displayController = ((gameContainer, resultsDisplay) => {
   }
 
   function stopGame() {
-    for (let i = 0; i < board.length; i++) {
-      board[i].removeEventListener('click', onClick);
-    }
+    board.forEach(item => item.removeEventListener('click', onClick));
+    restartBtn.classList.remove('off');
   }
 
   function onClick(event) {
@@ -202,8 +208,13 @@ const displayController = ((gameContainer, resultsDisplay) => {
     stopGame();
   }
 
+  function restartGame() {
+    restartBtn.classList.add('off');
+    createBoard();
+  }
+
   return { onClick };
-})(DOMobj.gameContainer, DOMobj.resultsDisplay);
+})(DOMobj);
 
 function createPlayer(name, symbol) {
   const playerName = name;

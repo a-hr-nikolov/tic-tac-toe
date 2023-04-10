@@ -193,8 +193,11 @@ const displayController = ((gameContainer, resultsDisplay) => {
 
   function onClick(event) {
     placeSymbol(event);
+
     const winner = checkWinCondition();
+
     if (!winner) return;
+
     displayWinner(winner);
     stopGame();
   }
@@ -217,8 +220,6 @@ const playerTwo = createPlayer('Player Two', 'O');
 
 // TODO:
 // Make it possible to input player name or select symbols
-
-// Event Listeners need to be turned off if there's a winner.
 
 // Logic to check for a full board and return a tie, if no winner
 

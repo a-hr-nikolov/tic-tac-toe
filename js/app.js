@@ -67,12 +67,10 @@ const gameBoard = (boardSizeString => {
 
 const displayController = ((gameContainer, resultsDisplay) => {
   let turnSwitch = true;
+  let board = gameBoard.getBoardState();
 
   (function createBoard() {
     gameContainer.textContent = '';
-
-    let board = gameBoard.getBoardState();
-    console.log(board);
 
     for (let i = 0; i < board.length; i++) {
       board[i].addEventListener('click', onClick);
@@ -187,9 +185,18 @@ const displayController = ((gameContainer, resultsDisplay) => {
     resultsDisplay.textContent = `${winnerString} wins`;
   }
 
+  function stopGame() {
+    for (let i = 0; i < board.length; i++) {
+      board[i].removeEventListener('click', onClick);
+    }
+  }
+
   function onClick(event) {
     placeSymbol(event);
-    displayWinner(checkWinCondition());
+    const winner = checkWinCondition();
+    if (!winner) return;
+    displayWinner(winner);
+    stopGame();
   }
 
   return { onClick };

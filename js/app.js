@@ -99,88 +99,91 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   }
 
   function checkWinCondition() {
-    // I map the empty cells to avoid checking for empty strings
-    // throughout the function
-    const boardState = gameBoard
-      .getBoardState()
-      .map(item => item.textContent)
-      .map((item, i) => {
-        if (item === '') return (item = i);
-        else return item;
-      });
+    // To only have to reference boardContent, not board[i].textContent
+    // Though this may actually be hurting performance. Maybe refactor?
+    const boardContent = board.map(item => item.textContent);
 
     // Check rows
-    for (let i = 0; i < boardState.length; i += Math.sqrt(boardState.length)) {
+    for (
+      let i = 0;
+      i < boardContent.length;
+      i += Math.sqrt(boardContent.length)
+    ) {
       let flagWin = true;
-      for (let j = i + 1; j < Math.sqrt(boardState.length) + i; j++) {
-        if (boardState[i] !== boardState[j]) {
+      if (boardContent[i] === '') continue;
+      for (let j = i + 1; j < Math.sqrt(boardContent.length) + i; j++) {
+        if (boardContent[i] !== boardContent[j]) {
           flagWin = false;
           break;
         }
       }
-      if (flagWin === true) return boardState[i];
+      if (flagWin === true) return boardContent[i];
     }
 
     // Check columns
-    for (let i = 0; i < Math.sqrt(boardState.length); i++) {
+    for (let i = 0; i < Math.sqrt(boardContent.length); i++) {
       let flagWin = true;
+      if (boardContent[i] === '') continue;
       for (
-        let j = i + Math.sqrt(boardState.length);
-        j < boardState.length;
-        j += Math.sqrt(boardState.length)
+        let j = i + Math.sqrt(boardContent.length);
+        j < boardContent.length;
+        j += Math.sqrt(boardContent.length)
       ) {
-        if (boardState[i] !== boardState[j]) {
+        if (boardContent[i] !== boardContent[j]) {
           flagWin = false;
           break;
         }
       }
-      if (flagWin === true) return boardState[i];
+      if (flagWin === true) return boardContent[i];
     }
 
     // Check main diagonal
-    {
+    if (boardContent[0] !== '') {
       let flagWin = true;
       for (
-        let i = Math.sqrt(boardState.length) + 1;
-        i < boardState.length;
-        i += Math.sqrt(boardState.length) + 1
+        let i = Math.sqrt(boardContent.length) + 1;
+        i < boardContent.length;
+        i += Math.sqrt(boardContent.length) + 1
       ) {
-        if (boardState[0] !== boardState[i]) {
-          console.log(boardState[0]);
-          console.log('This is ' + boardState[i]);
-          boardState[0] !== boardState[i];
+        if (boardContent[0] !== boardContent[i]) {
+          console.log(boardContent[0]);
+          console.log('This is ' + boardContent[i]);
+          boardContent[0] !== boardContent[i];
           flagWin = false;
           break;
         }
       }
       if (flagWin === true) {
-        return boardState[0];
+        return boardContent[0];
       }
     }
 
     // Check secondary diagonal
-    {
+    if (boardContent[Math.sqrt(boardContent.length) - 1] !== '') {
       let flagWin = true;
 
       // The initial i is initialized like that for math reasons.
       // The condition is grid size - 1 to avoid the last cell of the grid
       // passing the condition.
       for (
-        let i = Math.sqrt(boardState.length) * 2 - 2;
-        i < boardState.length - 1;
-        i += Math.sqrt(boardState.length) - 1
+        let i = Math.sqrt(boardContent.length) * 2 - 2;
+        i < boardContent.length - 1;
+        i += Math.sqrt(boardContent.length) - 1
       ) {
-        if (boardState[Math.sqrt(boardState.length) - 1] !== boardState[i]) {
+        if (
+          boardContent[Math.sqrt(boardContent.length) - 1] !== boardContent[i]
+        ) {
           flagWin = false;
           break;
         }
       }
 
-      if (flagWin === true) return boardState[Math.sqrt(boardState.length) - 1];
+      if (flagWin === true)
+        return boardContent[Math.sqrt(boardContent.length) - 1];
     }
 
     // Check full board with no winner
-    if (boardState.every(item => /[XO]/.test(item))) return 'draw';
+    if (boardContent.every(item => /[XO]/.test(item))) return 'draw';
   }
 
   function displayWinner(winnerString) {
@@ -210,6 +213,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
 
   function restartGame() {
     restartBtn.classList.add('off');
+    resultsDisplay.textContent = 'Who will win?';
     createBoard();
   }
 
@@ -231,8 +235,6 @@ const playerTwo = createPlayer('Player Two', 'O');
 
 // TODO:
 // Make it possible to input player name or select symbols
-
-// include a button to start/restart
 
 // Include grid size adjuster
 

@@ -1,7 +1,11 @@
-const gameContainer = document.querySelector('.game-container');
-const resultsDisplay = document.querySelector('.results');
+const DOMobj = (function () {
+  const gameContainer = document.querySelector('.game-container');
+  const resultsDisplay = document.querySelector('.results');
 
-gameContainer.style.height = getComputedStyle(gameContainer).width;
+  gameContainer.style.height = getComputedStyle(gameContainer).width;
+
+  return { gameContainer, resultsDisplay };
+})();
 
 const gameBoard = (boardSizeString => {
   /* 
@@ -61,7 +65,7 @@ const gameBoard = (boardSizeString => {
   return { getBoardState, setBoardCell };
 })('3x3');
 
-const displayController = (() => {
+const displayController = ((gameContainer, resultsDisplay) => {
   let turnSwitch = true;
 
   (function createBoard() {
@@ -179,7 +183,7 @@ const displayController = (() => {
 
     // Check full board with no winner
     if (boardState.every(item => /[XO]/.test(item))) {
-      resultsDisplay.textContent = "It's A DRAWWWWWW";
+      resultsDisplay.textContent = "It's A DRAW";
     }
   }
 
@@ -189,7 +193,7 @@ const displayController = (() => {
   }
 
   return { onClick };
-})();
+})(DOMobj.gameContainer, DOMobj.resultsDisplay);
 
 function createPlayer(name, symbol) {
   const playerName = name;

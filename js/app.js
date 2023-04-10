@@ -221,20 +221,13 @@ const playerTwo = createPlayer('Player Two', 'O');
 // TODO:
 // Make it possible to input player name or select symbols
 
-// Logic to check for a full board and return a tie, if no winner
-
 // include a button to start/restart
-
-// refactor checkWinCondition to return what should be displayed, but not affecting
-// the display. The display should be handled by a different function
 
 // Include grid size adjuster
 
 // Have a Game Controller to handle the Logic, and Display Controller to display without happens
 // The GameBoard object should only have an array of elements, it probably shouldn't be used to handle the display
 // of said elements.
-
-// Add a DOM Grabbing module
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

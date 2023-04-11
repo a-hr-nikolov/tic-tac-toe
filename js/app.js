@@ -60,7 +60,7 @@ const gameBoard = (boardSizeString => {
 
   function setBoardCell(index, mark) {
     if (boardCells[index].textContent !== '') return;
-    boardCells[index].textContent = mark;
+    boardCells[index].innerHTML = mark;
   }
 
   return { getBoardState, setBoardCell };
@@ -69,15 +69,16 @@ const gameBoard = (boardSizeString => {
 const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
+  const oMark = '<i class="fa-solid fa-o"></i>';
+  const xMark = '<i class="fa-solid fa-xmark"></i>';
 
   restartBtn.addEventListener('click', restartGame);
 
   const createBoard = (function createBoard() {
-    turnSwitch = true;
     gameContainer.textContent = '';
-    board.forEach(item => (item.textContent = ''));
 
     board.forEach(item => {
+      item.textContent = '';
       item.addEventListener('click', onClick);
       gameContainer.appendChild(item);
     });
@@ -89,8 +90,8 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     if (target.textContent !== '') return;
 
     let mark = null;
-    if (turnSwitch) mark = 'X';
-    else mark = 'O';
+    if (turnSwitch) mark = xMark;
+    else mark = oMark;
 
     const cellIndex = +target.getAttribute('data-index');
     gameBoard.setBoardCell(cellIndex, mark);
@@ -101,7 +102,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   function checkWinCondition() {
     // To only have to reference boardContent, not board[i].textContent
     // Though this may actually be hurting performance. Maybe refactor?
-    const boardContent = board.map(item => item.textContent);
+    const boardContent = board.map(item => item.innerHTML);
 
     // Check rows
     for (
@@ -192,7 +193,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
       resultsDisplay.textContent = "It's a draw";
       return;
     }
-    resultsDisplay.textContent = `${winnerString} wins`;
+    resultsDisplay.innerHTML = `${winnerString} wins`;
   }
 
   function stopGame() {
@@ -237,6 +238,9 @@ const playerTwo = createPlayer('Player Two', 'O');
 // Make it possible to input player name or select symbols
 
 // Include grid size adjuster
+
+// When changing symbols, make sure that the draw condition is appropriately checked.
+// Right now it isn't. It checks for X or O, but if O is a circle icon, it doesn't work.
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

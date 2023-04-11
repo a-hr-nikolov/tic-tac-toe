@@ -14,7 +14,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 10vmin;
+  font-size: 7vmin;
 }
 
 .game-container {
@@ -23,7 +23,7 @@ body {
   place-items: center;
   place-content: center;
 
-  width: min(800px, 90%);
+  width: min(50vh, 90%);
 
   gap: 1rem;
   background-color: black;
@@ -38,11 +38,32 @@ body {
   user-select: none;
 
   background-color: white;
+
+  font-size: min(20vmin, 12vh);
 }
 
 .restart {
-  font-size: 5rem;
   padding: 0.3rem 3rem;
+  border: none;
+  border-radius: 2vmin;
+
+  background-color: blueviolet;
+  font-size: inherit;
+  font-family: cursive;
+}
+
+.restart:active {
+  scale: 1.05;
+}
+
+.restart:focus {
+  border: none;
+}
+
+@media (hover: hover) {
+  .restart:hover {
+    background-color: brown;
+  }
 }
 
 .results {

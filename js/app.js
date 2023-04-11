@@ -239,8 +239,8 @@ const playerTwo = createPlayer('Player Two', 'O');
 
 // Include grid size adjuster
 
-// When changing symbols, make sure that the draw condition is appropriately checked.
-// Right now it isn't. It checks for X or O, but if O is a circle icon, it doesn't work.
+// Add a symbol selector for player 1 and player 2 that automatically switches symbols when one is selected.
+// Add a highlighter for whose turn it is. Turns should switch based on who started first last game.
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

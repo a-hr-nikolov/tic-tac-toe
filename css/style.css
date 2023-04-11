@@ -4,12 +4,9 @@
   box-sizing: border-box;
 }
 
-.off {
-  visibility: hidden;
-}
-
 .fade {
   opacity: 0.2;
+  transition-duration: 500ms;
 }
 
 body {
@@ -77,6 +74,8 @@ h1 {
   font-size: inherit;
   font-family: inherit;
   font-weight: 700;
+
+  display: none;
 }
 
 .restart:active {
@@ -85,6 +84,11 @@ h1 {
 
 .restart:focus {
   border: none;
+}
+
+.on {
+  transition: 300ms;
+  display: inline;
 }
 
 @media (hover: hover) {

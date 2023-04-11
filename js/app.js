@@ -199,8 +199,9 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   }
 
   function stopGame() {
+    gameContainer.classList.add('fade');
+    restartBtn.classList.add('on');
     board.forEach(item => item.removeEventListener('click', onClick));
-    restartBtn.classList.remove('off');
   }
 
   function onClick(event) {
@@ -215,7 +216,8 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   }
 
   function restartGame() {
-    restartBtn.classList.add('off');
+    restartBtn.classList.remove('on');
+    gameContainer.classList.remove('fade');
     resultsDisplay.textContent = 'Who will win?';
     createBoard();
   }

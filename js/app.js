@@ -184,7 +184,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     }
 
     // Check full board with no winner
-    if (boardContent.every(item => /[XO]/.test(item))) return 'draw';
+    if (boardContent.every(item => item !== '')) return 'draw';
   }
 
   function displayWinner(winnerString) {

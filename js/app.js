@@ -69,8 +69,10 @@ const gameBoard = (boardSizeString => {
 const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
-  const oMark = '<i class="fa-solid fa-o"></i>';
-  const xMark = '<i class="fa-solid fa-xmark"></i>';
+  // const oMark = '<i class="fa-solid fa-o"></i>';
+  // const xMark = '<i class="fa-solid fa-xmark"></i>';
+  const oMark = 'O';
+  const xMark = 'X';
 
   restartBtn.addEventListener('click', restartGame);
 

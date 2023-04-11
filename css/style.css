@@ -30,7 +30,7 @@ body {
   width: min(50vh, 90%);
 
   gap: 1rem;
-  background-image: url('../imgs/grid.png');
+  background-image: url('../imgs/grid.svg');
   background-size: contain;
   background-repeat: no-repeat;
 }

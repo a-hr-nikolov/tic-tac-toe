@@ -8,6 +8,10 @@
   visibility: hidden;
 }
 
+.fade {
+  opacity: 0.2;
+}
+
 body {
   height: 100svh;
 
@@ -16,9 +20,19 @@ body {
   align-items: center;
   justify-content: center;
 
+  background: linear-gradient(
+    135deg,
+    rgba(160, 231, 229, 1) 0%,
+    rgba(180, 248, 200, 1) 100%
+  );
+
   font-family: 'DynaPuff', cursive;
   font-weight: 400;
   font-size: 7vmin;
+}
+
+.relative-container {
+  display: contents;
 }
 
 .game-container {
@@ -48,12 +62,18 @@ body {
   font-size: min(20vmin, 12vh);
 }
 
+h1 {
+  font-size: inherit;
+}
+
 .restart {
+  position: absolute;
+
   padding: 0.3rem 3rem;
   border: none;
   border-radius: 2vmin;
 
-  background-color: blueviolet;
+  background-color: #ffaebc;
   font-size: inherit;
   font-family: inherit;
   font-weight: 700;
@@ -69,7 +89,7 @@ body {
 
 @media (hover: hover) {
   .restart:hover {
-    background-color: brown;
+    filter: brightness(1.1);
   }
 }
 

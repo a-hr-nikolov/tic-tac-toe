@@ -30,7 +30,9 @@ body {
   width: min(50vh, 90%);
 
   gap: 1rem;
-  background-color: black;
+  background-image: url('../imgs/grid.png');
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .cell {
@@ -41,7 +43,7 @@ body {
   height: 100%;
   user-select: none;
 
-  background-color: white;
+  background-color: transparent;
 
   font-size: min(20vmin, 12vh);
 }

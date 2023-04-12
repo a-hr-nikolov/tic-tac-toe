@@ -63,6 +63,18 @@ h1 {
   font-size: inherit;
 }
 
+h2 {
+  font-size: 1rem;
+}
+
+.control-container {
+  display: flex;
+}
+
+.player {
+  display: flex;
+}
+
 .restart {
   position: absolute;
 

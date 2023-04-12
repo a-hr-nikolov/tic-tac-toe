@@ -13,10 +13,17 @@ const DOMobj = (function () {
   const resultsDisplay = document.querySelector('.results');
   const restartBtn = document.querySelector('.restart');
   const playerMarkers = document.querySelectorAll('.player-marker');
+  const switchBtn = document.querySelector('.switch');
 
   gameContainer.style.height = getComputedStyle(gameContainer).width;
 
-  return { gameContainer, resultsDisplay, restartBtn, playerMarkers };
+  return {
+    gameContainer,
+    resultsDisplay,
+    restartBtn,
+    playerMarkers,
+    switchBtn,
+  };
 })();
 
 const gameBoard = (boardSizeString => {
@@ -85,6 +92,7 @@ const displayController = (({
   resultsDisplay,
   restartBtn,
   playerMarkers,
+  switchBtn,
 }) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
@@ -92,6 +100,7 @@ const displayController = (({
   const xMark = 'xmark';
 
   restartBtn.addEventListener('click', restartGame);
+  switchBtn.addEventListener('click', switchMarkers);
 
   const createBoard = (function createBoard() {
     board.forEach(item => {
@@ -236,6 +245,13 @@ const displayController = (({
     gameContainer.classList.remove('fade');
     resultsDisplay.textContent = 'Who will win?';
     createBoard();
+  }
+
+  function switchMarkers() {
+    playerMarkers.forEach(item => {
+      item.classList.toggle('omark');
+      item.classList.toggle('xmark');
+    });
   }
 
   return { onClick };

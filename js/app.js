@@ -70,29 +70,34 @@ const gameBoard = (boardSizeString => {
   */
 
   function setBoardCell(index, mark) {
-    if (boardCells[index].textContent !== '') return;
-    boardCells[index].innerHTML = mark;
+    // if (boardCells[index].textContent !== '') return;
+    // boardCells[index].innerHTML = mark;
+    // if (boardCells[index].classList.)
+    boardCells[index].classList.add(mark);
+    boardCells[index].setAttribute('data-marked', mark);
   }
 
   return { getBoardState, setBoardCell };
 })('3x3');
 
-const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
+const displayController = (({
+  gameContainer,
+  resultsDisplay,
+  restartBtn,
+  playerMarkers,
+}) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
-  // const oMark = '<i class="fa-solid fa-o"></i>';
-  // const xMark = '<i class="fa-solid fa-xmark"></i>';
-  const oMark = 'O';
-  const xMark = 'X';
+  const oMark = 'omark';
+  const xMark = 'xmark';
 
   restartBtn.addEventListener('click', restartGame);
 
   const createBoard = (function createBoard() {
-    gameContainer.textContent = '';
-
     board.forEach(item => {
-      item.textContent = '';
+      item.setAttribute('data-marked', 'unmarked');
       item.addEventListener('click', onClick);
+      item.className = 'cell';
       gameContainer.appendChild(item);
     });
 
@@ -100,14 +105,14 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   })();
 
   function placeSymbol({ target }) {
-    if (target.textContent !== '') return;
+    if (target.getAttribute('data-marked') !== 'unmarked') return;
 
-    let mark = null;
-    if (turnSwitch) mark = xMark;
-    else mark = oMark;
+    let marker = null;
+    if (turnSwitch) marker = xMark;
+    else marker = oMark;
 
     const cellIndex = +target.getAttribute('data-index');
-    gameBoard.setBoardCell(cellIndex, mark);
+    gameBoard.setBoardCell(cellIndex, marker);
 
     turnSwitch = !turnSwitch;
   }
@@ -115,7 +120,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
   function checkWinCondition() {
     // To only have to reference boardContent, not board[i].textContent
     // Though this may actually be hurting performance. Maybe refactor?
-    const boardContent = board.map(item => item.innerHTML);
+    const boardContent = board.map(item => item.getAttribute('data-marked'));
 
     // Check rows
     for (
@@ -124,7 +129,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
       i += Math.sqrt(boardContent.length)
     ) {
       let flagWin = true;
-      if (boardContent[i] === '') continue;
+      if (boardContent[i] === 'unmarked') continue;
       for (let j = i + 1; j < Math.sqrt(boardContent.length) + i; j++) {
         if (boardContent[i] !== boardContent[j]) {
           flagWin = false;
@@ -137,7 +142,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     // Check columns
     for (let i = 0; i < Math.sqrt(boardContent.length); i++) {
       let flagWin = true;
-      if (boardContent[i] === '') continue;
+      if (boardContent[i] === 'unmarked') continue;
       for (
         let j = i + Math.sqrt(boardContent.length);
         j < boardContent.length;
@@ -152,7 +157,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     }
 
     // Check main diagonal
-    if (boardContent[0] !== '') {
+    if (boardContent[0] !== 'unmarked') {
       let flagWin = true;
       for (
         let i = Math.sqrt(boardContent.length) + 1;
@@ -173,7 +178,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     }
 
     // Check secondary diagonal
-    if (boardContent[Math.sqrt(boardContent.length) - 1] !== '') {
+    if (boardContent[Math.sqrt(boardContent.length) - 1] !== 'unmarked') {
       let flagWin = true;
 
       // The initial i is initialized like that for math reasons.
@@ -197,7 +202,7 @@ const displayController = (({ gameContainer, resultsDisplay, restartBtn }) => {
     }
 
     // Check full board with no winner
-    if (boardContent.every(item => item !== '')) return 'draw';
+    if (boardContent.every(item => item !== 'unmarked')) return 'draw';
   }
 
   function displayWinner(winnerString) {

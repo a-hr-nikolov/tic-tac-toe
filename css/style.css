@@ -73,6 +73,18 @@ h2 {
 
 .player {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 3rem;
+}
+
+.player-marker {
+  height: 3vmin;
+  width: 3vmin;
+}
+
+.turn {
+  background-color: white;
 }
 
 .restart {

@@ -122,8 +122,6 @@ const displayController = (({
 
     const cellIndex = +target.getAttribute('data-index');
     gameBoard.setBoardCell(cellIndex, marker);
-
-    turnSwitch = !turnSwitch;
   }
 
   function checkWinCondition() {
@@ -220,7 +218,7 @@ const displayController = (({
       resultsDisplay.textContent = "It's a draw";
       return;
     }
-    resultsDisplay.innerHTML = `${winnerString} wins`;
+    resultsDisplay.textContent = `${winnerString} wins`;
   }
 
   function stopGame() {
@@ -234,10 +232,13 @@ const displayController = (({
 
     const winner = checkWinCondition();
 
-    if (!winner) return;
+    if (winner) {
+      displayWinner(winner);
+      stopGame();
+      return;
+    }
 
-    displayWinner(winner);
-    stopGame();
+    switchTurn();
   }
 
   function restartGame() {
@@ -252,6 +253,12 @@ const displayController = (({
       item.classList.toggle('omark');
       item.classList.toggle('xmark');
     });
+    switchTurn();
+    restartGame();
+  }
+
+  function switchTurn() {
+    turnSwitch = !turnSwitch;
   }
 
   return { onClick };
@@ -271,6 +278,10 @@ const playerOne = createPlayer('Player One', 'X');
 const playerTwo = createPlayer('Player Two', 'O');
 
 // TODO:
+// The turn switcher should switch turns and every new game should start with the other player
+// The marker switcher should switch markers and restart the game appropriately. Right now it does it
+// but the one who starts the game is the next person that should click. It isn't determined properly.
+
 // Make it possible to input player name or select symbols
 
 // Include grid size adjuster

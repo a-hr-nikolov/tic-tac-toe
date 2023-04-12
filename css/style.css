@@ -109,5 +109,17 @@ h2 {
   }
 }
 
+.omark {
+  background-image: url('../imgs/omark.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.xmark {
+  background-image: url('../imgs/xmark.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .results {
 }

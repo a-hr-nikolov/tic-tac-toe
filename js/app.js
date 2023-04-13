@@ -266,7 +266,11 @@ const displayController = ((
       item.classList.toggle('o');
       item.classList.toggle('x');
     });
-    switchTurn();
+
+    let temp = playerOne.marker;
+    playerOne.marker = playerTwo.marker;
+    playerTwo.marker = temp;
+
     restartGame();
   }
 

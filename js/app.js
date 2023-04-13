@@ -94,8 +94,8 @@ function createPlayer(name, marker) {
   return { name, marker };
 }
 
-const playerOne = createPlayer('Player One', 'x');
-const playerTwo = createPlayer('Player Two', 'o');
+const playerOne = createPlayer('Player 1', 'x');
+const playerTwo = createPlayer('Player 2', 'o');
 
 const displayController = ((
   {
@@ -109,7 +109,12 @@ const displayController = ((
   playerOne,
   playerTwo
 ) => {
+  // Switches turns on every click
   let turnSwitch = true;
+
+  // Switches who starts first each round
+  let startSwitch = true;
+
   let board = gameBoard.getBoardState();
 
   restartBtn.addEventListener('click', restartGame);
@@ -182,8 +187,6 @@ const displayController = ((
         i += Math.sqrt(boardContent.length) + 1
       ) {
         if (boardContent[0] !== boardContent[i]) {
-          console.log(boardContent[0]);
-          console.log('This is ' + boardContent[i]);
           boardContent[0] !== boardContent[i];
           flagWin = false;
           break;
@@ -222,13 +225,21 @@ const displayController = ((
     if (boardContent.every(item => item !== 'unmarked')) return 'draw';
   }
 
-  function displayWinner(winnerString) {
-    if (!winnerString) return;
-    if (winnerString === 'draw') {
+  function displayWinner(winningMarker) {
+    if (!winningMarker) return;
+    if (winningMarker === 'draw') {
       resultsDisplay.textContent = "It's a draw";
       return;
     }
-    resultsDisplay.textContent = `${winnerString} wins`;
+
+    console.log(winningMarker);
+    console.log(playerOne.marker);
+
+    let winner = null;
+    if (winningMarker === playerOne.marker) winner = playerOne.name;
+    if (winningMarker === playerTwo.marker) winner = playerTwo.name;
+
+    resultsDisplay.textContent = `${winner} wins`;
   }
 
   function stopGame() {
@@ -258,6 +269,8 @@ const displayController = ((
     postgameDisplay.classList.remove('on');
     gameContainer.classList.remove('fade');
     board.forEach(item => item.setAttribute('data-marked', 'unmarked'));
+    if (startSwitch === turnSwitch) switchTurn();
+    startSwitch = !startSwitch;
     createBoard();
   }
 
@@ -270,8 +283,6 @@ const displayController = ((
     let temp = playerOne.marker;
     playerOne.marker = playerTwo.marker;
     playerTwo.marker = temp;
-
-    restartGame();
   }
 
   function switchTurn() {
@@ -283,16 +294,10 @@ const displayController = ((
 })(DOMobj, playerOne, playerTwo);
 
 // TODO:
-// The turn switcher should switch turns and every new game should start with the other player
-// The marker switcher should switch markers and restart the game appropriately. Right now it does it
-// but the one who starts the game is the next person that should click. It isn't determined properly.
 
-// Make it possible to input player name or select symbols
+// Figure out how to turn marker switcher when the game has already started. Maybe reset everything?
 
 // Include grid size adjuster
-
-// Add a symbol selector for player 1 and player 2 that automatically switches symbols when one is selected.
-// Add a highlighter for whose turn it is. Turns should switch based on who started first last game.
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

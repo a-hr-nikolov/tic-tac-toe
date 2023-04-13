@@ -10,9 +10,10 @@ a snapshot of how my skills have changed throughout time.
 
 const DOMobj = (function () {
   const gameContainer = document.querySelector('.game-container');
+  const postgameDisplay = document.querySelector('.post-game');
   const resultsDisplay = document.querySelector('.results');
-  const restartBtn = document.querySelector('.restart');
   const playerMarkers = document.querySelectorAll('.player-marker');
+  const restartBtn = document.querySelector('.restart');
   const switchBtn = document.querySelector('.switch');
 
   gameContainer.style.height = getComputedStyle(gameContainer).width;
@@ -23,6 +24,7 @@ const DOMobj = (function () {
     restartBtn,
     playerMarkers,
     switchBtn,
+    postgameDisplay,
   };
 })();
 
@@ -93,6 +95,7 @@ const displayController = (({
   restartBtn,
   playerMarkers,
   switchBtn,
+  postgameDisplay,
 }) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
@@ -223,7 +226,7 @@ const displayController = (({
 
   function stopGame() {
     gameContainer.classList.add('fade');
-    restartBtn.classList.add('on');
+    postgameDisplay.classList.add('on');
     board.forEach(item => item.removeEventListener('click', onClick));
   }
 
@@ -242,9 +245,8 @@ const displayController = (({
   }
 
   function restartGame() {
-    restartBtn.classList.remove('on');
+    postgameDisplay.classList.remove('on');
     gameContainer.classList.remove('fade');
-    resultsDisplay.textContent = 'Who will win?';
     createBoard();
   }
 
@@ -259,6 +261,7 @@ const displayController = (({
 
   function switchTurn() {
     turnSwitch = !turnSwitch;
+    playerMarkers.forEach(item => item.classList.toggle('turn'));
   }
 
   return { onClick };

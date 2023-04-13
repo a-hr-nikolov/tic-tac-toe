@@ -6,7 +6,7 @@
 
 .fade {
   opacity: 0.1;
-  transition-duration: 500ms;
+  transition-duration: 300ms;
 }
 
 body {
@@ -126,11 +126,11 @@ h2 {
   }
 }
 
-.omark::before {
+.o::before {
   content: 'O';
 }
 
-.xmark::before {
+.x::before {
   content: 'X';
 }
 

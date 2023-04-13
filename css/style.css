@@ -5,7 +5,7 @@
 }
 
 .fade {
-  opacity: 0.2;
+  opacity: 0.1;
   transition-duration: 500ms;
 }
 
@@ -79,8 +79,11 @@ h2 {
 }
 
 .player-marker {
+  display: grid;
+  place-items: center;
   height: 3vmin;
   width: 3vmin;
+  font-size: 2rem;
 }
 
 .turn {
@@ -88,8 +91,6 @@ h2 {
 }
 
 .restart {
-  position: absolute;
-
   padding: 0.3rem 3rem;
   border: none;
   border-radius: 2vmin;
@@ -98,8 +99,6 @@ h2 {
   font-size: inherit;
   font-family: inherit;
   font-weight: 700;
-
-  display: none;
 }
 
 .restart:active {
@@ -110,9 +109,15 @@ h2 {
   border: none;
 }
 
+.post-game {
+  position: absolute;
+  display: none;
+}
+
 .on {
-  transition: 300ms;
-  display: inline;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (hover: hover) {
@@ -121,16 +126,12 @@ h2 {
   }
 }
 
-.omark {
-  background-image: url('../imgs/omark.svg');
-  background-size: cover;
-  background-repeat: no-repeat;
+.omark::before {
+  content: 'O';
 }
 
-.xmark {
-  background-image: url('../imgs/xmark.svg');
-  background-size: cover;
-  background-repeat: no-repeat;
+.xmark::before {
+  content: 'X';
 }
 
 .results {

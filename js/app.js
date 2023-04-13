@@ -59,6 +59,7 @@ const gameBoard = (boardSizeString => {
       boardCells[i] = document.createElement('div');
       boardCells[i].classList.add('cell');
       boardCells[i].setAttribute('data-index', `${i}`);
+      boardCells[i].setAttribute('data-marked', 'unmarked');
     }
   })();
 
@@ -89,25 +90,33 @@ const gameBoard = (boardSizeString => {
   return { getBoardState, setBoardCell };
 })('3x3');
 
-const displayController = (({
-  gameContainer,
-  resultsDisplay,
-  restartBtn,
-  playerMarkers,
-  switchBtn,
-  postgameDisplay,
-}) => {
+function createPlayer(name, marker) {
+  return { name, marker };
+}
+
+const playerOne = createPlayer('Player One', 'x');
+const playerTwo = createPlayer('Player Two', 'o');
+
+const displayController = ((
+  {
+    gameContainer,
+    resultsDisplay,
+    restartBtn,
+    playerMarkers,
+    switchBtn,
+    postgameDisplay,
+  },
+  playerOne,
+  playerTwo
+) => {
   let turnSwitch = true;
   let board = gameBoard.getBoardState();
-  const oMark = 'omark';
-  const xMark = 'xmark';
 
   restartBtn.addEventListener('click', restartGame);
   switchBtn.addEventListener('click', switchMarkers);
 
   const createBoard = (function createBoard() {
     board.forEach(item => {
-      item.setAttribute('data-marked', 'unmarked');
       item.addEventListener('click', onClick);
       item.className = 'cell';
       gameContainer.appendChild(item);
@@ -117,11 +126,9 @@ const displayController = (({
   })();
 
   function placeSymbol({ target }) {
-    if (target.getAttribute('data-marked') !== 'unmarked') return;
-
     let marker = null;
-    if (turnSwitch) marker = xMark;
-    else marker = oMark;
+    if (turnSwitch) marker = playerOne.marker;
+    else marker = playerTwo.marker;
 
     const cellIndex = +target.getAttribute('data-index');
     gameBoard.setBoardCell(cellIndex, marker);
@@ -226,11 +233,14 @@ const displayController = (({
 
   function stopGame() {
     gameContainer.classList.add('fade');
-    postgameDisplay.classList.add('on');
+    setTimeout(() => postgameDisplay.classList.add('on'), 200);
+    // postgameDisplay.classList.add('on');
     board.forEach(item => item.removeEventListener('click', onClick));
   }
 
   function onClick(event) {
+    if (event.target.getAttribute('data-marked') !== 'unmarked') return;
+
     placeSymbol(event);
 
     const winner = checkWinCondition();
@@ -247,13 +257,14 @@ const displayController = (({
   function restartGame() {
     postgameDisplay.classList.remove('on');
     gameContainer.classList.remove('fade');
+    board.forEach(item => item.setAttribute('data-marked', 'unmarked'));
     createBoard();
   }
 
   function switchMarkers() {
     playerMarkers.forEach(item => {
-      item.classList.toggle('omark');
-      item.classList.toggle('xmark');
+      item.classList.toggle('o');
+      item.classList.toggle('x');
     });
     switchTurn();
     restartGame();
@@ -265,20 +276,7 @@ const displayController = (({
   }
 
   return { onClick };
-})(DOMobj);
-
-function createPlayer(name, symbol) {
-  const playerName = name;
-  const playerSymbol = symbol;
-
-  const getName = () => playerName;
-  const getSymbol = () => playerSymbol;
-
-  return { getName, getSymbol };
-}
-
-const playerOne = createPlayer('Player One', 'X');
-const playerTwo = createPlayer('Player Two', 'O');
+})(DOMobj, playerOne, playerTwo);
 
 // TODO:
 // The turn switcher should switch turns and every new game should start with the other player

@@ -55,7 +55,7 @@ const gameBoard = (boardSizeString => {
 
   (function initBoardState() {
     boardCells = [];
-    for (let i = 0; i < getBoardSize() ** 2; i++) {
+    for (let i = 0, gridSize = calcGridSize(); i < gridSize; i++) {
       boardCells[i] = document.createElement('div');
       boardCells[i].classList.add('cell');
       boardCells[i].setAttribute('data-index', `${i}`);
@@ -63,8 +63,8 @@ const gameBoard = (boardSizeString => {
     }
   })();
 
-  function getBoardSize() {
-    return +boardSize.match(/^\d/);
+  function calcGridSize() {
+    return (+boardSize.match(/^\d/)) ** 2;
   }
 
   function getBoardState() {

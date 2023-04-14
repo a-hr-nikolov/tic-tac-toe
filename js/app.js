@@ -29,37 +29,13 @@ const DOMobj = (function () {
 })();
 
 const gameBoard = (boardSizeString => {
-  /* 
-  
-  After some deliberation on whether to completely separate concerns between a display
-  component and a board state component, I decided that I can sacrifice a bit of that
-  separation for better performance. It felt right to me.
-  
-  This is why instead of creating an object that simply holds the contents of the board 
-  cells (i.e. the state), it can instead hold the 'cells' themselves - the divs that 
-  will be placed in the DOM.
-  
-  While this doesn't save us the trouble of repopulating the DOM on every change, it
-  spares us having to redeclare and reinitialize the divs themselves. This should count
-  for something.
-
-  On a similar note, I now understand one aspect of what makes React so powerful. If I
-  rewrite this in React, I can actually have separation of concerns AND the performance
-  will be the same or better, because of the virtual DOM, as it wouldn't cause unnecessary
-  re-renders.
-  
-  */
-
   let boardSize = boardSizeString;
   let boardCells = [];
 
   (function initBoardState() {
     boardCells = [];
     for (let i = 0, gridSize = calcGridSize(); i < gridSize; i++) {
-      boardCells[i] = document.createElement('div');
-      boardCells[i].classList.add('cell');
-      boardCells[i].setAttribute('data-index', `${i}`);
-      boardCells[i].setAttribute('data-marked', 'unmarked');
+      boardCells[i] = '';
     }
   })();
 
@@ -76,20 +52,8 @@ const gameBoard = (boardSizeString => {
     return boardCells;
   }
 
-  /*
-
-  Here I again had to decide how to treat separation of concerns. I figured
-  it is best if I handle the changing of board state from within the gameBoard
-  object itself.
-
-  */
-
   function setBoardCell(index, mark) {
-    // if (boardCells[index].textContent !== '') return;
-    // boardCells[index].innerHTML = mark;
-    // if (boardCells[index].classList.)
-    boardCells[index].classList.add(mark);
-    boardCells[index].setAttribute('data-marked', mark);
+    boardCells[index] = mark;
   }
 
   return { getBoardState, setBoardCell };
@@ -122,6 +86,21 @@ const displayController = ((
   let startSwitch = true;
 
   let board = gameBoard.getBoardState();
+
+  function setBoardCell(index, mark) {
+    // if (boardCells[index].textContent !== '') return;
+    // boardCells[index].innerHTML = mark;
+    // if (boardCells[index].classList.)
+    boardCells[index].classList.add(mark);
+    boardCells[index].setAttribute('data-marked', mark);
+  }
+
+  for (let i = 0, gridSize = calcGridSize(); i < gridSize; i++) {
+    boardCells[i] = document.createElement('div');
+    boardCells[i].classList.add('cell');
+    boardCells[i].setAttribute('data-index', `${i}`);
+    boardCells[i].setAttribute('data-marked', 'unmarked');
+  }
 
   restartBtn.addEventListener('click', restartGame);
   switchBtn.addEventListener('click', switchMarkers);

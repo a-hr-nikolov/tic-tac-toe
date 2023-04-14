@@ -5,6 +5,7 @@
 }
 
 .fade {
+  pointer-events: none;
   opacity: 0.1;
   transition-duration: 300ms;
 }

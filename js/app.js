@@ -49,7 +49,7 @@ const gameBoard = (boardSizeString => {
   // we at least always have a reference to the array, even if it gets mutated.
 
   function getBoardState() {
-    return boardCells;
+    return [...boardCells];
   }
 
   function setBoardCell(index, mark) {

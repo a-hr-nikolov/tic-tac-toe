@@ -35,7 +35,7 @@ const gameBoard = (boardSizeString => {
   (function initBoardState() {
     boardCells = [];
     for (let i = 0, gridSize = calcGridSize(); i < gridSize; i++) {
-      boardCells[i] = '';
+      boardCells[i] = 'unmarked';
     }
   })();
 
@@ -52,8 +52,8 @@ const gameBoard = (boardSizeString => {
     return [...boardCells];
   }
 
-  function setBoardCell(index, mark) {
-    boardCells[index] = mark;
+  function setBoardCell(index, marker) {
+    boardCells[index] = marker;
   }
 
   return { getBoardState, setBoardCell };
@@ -85,129 +85,110 @@ const displayController = ((
   // Switches who starts first each round
   let startSwitch = true;
 
-  let board = gameBoard.getBoardState();
+  let board = gameBoard.getBoardState().map((item, i) => {
+    let div = document.createElement('div');
+    div.setAttribute('data-index', `${i}`);
+    div.setAttribute('data-marked', item);
+    div.className = 'cell';
+    div.addEventListener('click', handleCellClick);
+    gameContainer.appendChild(div);
+    return div;
+  });
 
-  function setBoardCell(index, mark) {
-    // if (boardCells[index].textContent !== '') return;
-    // boardCells[index].innerHTML = mark;
-    // if (boardCells[index].classList.)
-    boardCells[index].classList.add(mark);
-    boardCells[index].setAttribute('data-marked', mark);
-  }
-
-  for (let i = 0, gridSize = calcGridSize(); i < gridSize; i++) {
-    boardCells[i] = document.createElement('div');
-    boardCells[i].classList.add('cell');
-    boardCells[i].setAttribute('data-index', `${i}`);
-    boardCells[i].setAttribute('data-marked', 'unmarked');
-  }
-
-  restartBtn.addEventListener('click', restartGame);
   switchBtn.addEventListener('click', switchMarkers);
+  restartBtn.addEventListener('click', restartGame);
 
   const createBoard = (function createBoard() {
     board.forEach(item => {
-      item.addEventListener('click', onClick);
       item.className = 'cell';
-      gameContainer.appendChild(item);
     });
 
     return createBoard;
   })();
 
-  function placeSymbol({ target }) {
+  function placeMarker({ target }) {
     let marker = null;
     if (turnSwitch) marker = playerOne.marker;
     else marker = playerTwo.marker;
 
     const cellIndex = +target.getAttribute('data-index');
+
+    // Updates display
+    board[cellIndex].classList.add(marker);
+    board[cellIndex].setAttribute('data-marked', marker);
+
+    // Updates state, possibly should be abstracted in another function
     gameBoard.setBoardCell(cellIndex, marker);
   }
 
   function checkWinCondition() {
-    // To only have to reference boardContent, not board[i].textContent
-    // Though this may actually be hurting performance. Maybe refactor?
-    const boardContent = board.map(item => item.getAttribute('data-marked'));
+    const boardState = gameBoard.getBoardState();
+    const trackSize = Math.sqrt(boardState.length);
 
     // Check rows
-    for (
-      let i = 0;
-      i < boardContent.length;
-      i += Math.sqrt(boardContent.length)
-    ) {
+    for (let i = 0; i < boardState.length; i += trackSize) {
       let flagWin = true;
-      if (boardContent[i] === 'unmarked') continue;
-      for (let j = i + 1; j < Math.sqrt(boardContent.length) + i; j++) {
-        if (boardContent[i] !== boardContent[j]) {
+      if (boardState[i] === 'unmarked') continue;
+      for (let j = i + 1; j < trackSize + i; j++) {
+        if (boardState[i] !== boardState[j]) {
           flagWin = false;
           break;
         }
       }
-      if (flagWin === true) return boardContent[i];
+      if (flagWin === true) return boardState[i];
     }
 
     // Check columns
-    for (let i = 0; i < Math.sqrt(boardContent.length); i++) {
+    for (let i = 0; i < trackSize; i++) {
       let flagWin = true;
-      if (boardContent[i] === 'unmarked') continue;
-      for (
-        let j = i + Math.sqrt(boardContent.length);
-        j < boardContent.length;
-        j += Math.sqrt(boardContent.length)
-      ) {
-        if (boardContent[i] !== boardContent[j]) {
+      if (boardState[i] === 'unmarked') continue;
+      for (let j = i + trackSize; j < boardState.length; j += trackSize) {
+        if (boardState[i] !== boardState[j]) {
           flagWin = false;
           break;
         }
       }
-      if (flagWin === true) return boardContent[i];
+      if (flagWin === true) return boardState[i];
     }
 
     // Check main diagonal
-    if (boardContent[0] !== 'unmarked') {
+    if (boardState[0] !== 'unmarked') {
       let flagWin = true;
-      for (
-        let i = Math.sqrt(boardContent.length) + 1;
-        i < boardContent.length;
-        i += Math.sqrt(boardContent.length) + 1
-      ) {
-        if (boardContent[0] !== boardContent[i]) {
-          boardContent[0] !== boardContent[i];
+      for (let i = trackSize + 1; i < boardState.length; i += trackSize + 1) {
+        if (boardState[0] !== boardState[i]) {
+          boardState[0] !== boardState[i];
           flagWin = false;
           break;
         }
       }
       if (flagWin === true) {
-        return boardContent[0];
+        return boardState[0];
       }
     }
 
     // Check secondary diagonal
-    if (boardContent[Math.sqrt(boardContent.length) - 1] !== 'unmarked') {
+    if (boardState[trackSize - 1] !== 'unmarked') {
       let flagWin = true;
 
       // The initial i is initialized like that for math reasons.
       // The condition is grid size - 1 to avoid the last cell of the grid
       // passing the condition.
       for (
-        let i = Math.sqrt(boardContent.length) * 2 - 2;
-        i < boardContent.length - 1;
-        i += Math.sqrt(boardContent.length) - 1
+        let i = trackSize * 2 - 2;
+        i < boardState.length - 1;
+        i += trackSize - 1
       ) {
-        if (
-          boardContent[Math.sqrt(boardContent.length) - 1] !== boardContent[i]
-        ) {
+        if (boardState[trackSize - 1] !== boardState[i]) {
           flagWin = false;
           break;
         }
       }
 
-      if (flagWin === true)
-        return boardContent[Math.sqrt(boardContent.length) - 1];
+      if (flagWin === true) return boardState[trackSize - 1];
     }
 
     // Check full board with no winner
-    if (boardContent.every(item => item !== 'unmarked')) return 'draw';
+    if (boardState.every(item => item !== 'unmarked')) return 'draw';
   }
 
   function displayWinner(winningMarker) {
@@ -216,9 +197,6 @@ const displayController = ((
       resultsDisplay.textContent = "It's a draw";
       return;
     }
-
-    console.log(winningMarker);
-    console.log(playerOne.marker);
 
     let winner = null;
     if (winningMarker === playerOne.marker) winner = playerOne.name;
@@ -229,15 +207,13 @@ const displayController = ((
 
   function stopGame() {
     gameContainer.classList.add('fade');
-    setTimeout(() => postgameDisplay.classList.add('on'), 200);
-    // postgameDisplay.classList.add('on');
-    board.forEach(item => item.removeEventListener('click', onClick));
+    setTimeout(() => postgameDisplay.classList.add('on'), 100);
   }
 
-  function onClick(event) {
+  function handleCellClick(event) {
     if (event.target.getAttribute('data-marked') !== 'unmarked') return;
 
-    placeSymbol(event);
+    placeMarker(event);
 
     const winner = checkWinCondition();
 
@@ -253,10 +229,15 @@ const displayController = ((
   function restartGame() {
     postgameDisplay.classList.remove('on');
     gameContainer.classList.remove('fade');
-    board.forEach(item => item.setAttribute('data-marked', 'unmarked'));
+
+    board.forEach((item, i) => {
+      item.setAttribute('data-marked', 'unmarked');
+      item.className = 'cell';
+      gameBoard.setBoardCell(i, 'unmarked');
+    });
+
     if (startSwitch === turnSwitch) switchTurn();
     startSwitch = !startSwitch;
-    createBoard();
   }
 
   function switchMarkers() {
@@ -275,7 +256,7 @@ const displayController = ((
     playerMarkers.forEach(item => item.classList.toggle('turn'));
   }
 
-  return { onClick };
+  return { handleCellClick };
 })(DOMobj, gameBoard, playerOne, playerTwo);
 
 // TODO:

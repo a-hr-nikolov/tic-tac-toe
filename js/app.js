@@ -70,10 +70,10 @@ const displayController = ((
   playerOne,
   playerTwo
 ) => {
-  // Switches turns on every click
+  // For switching turns on every click
   let turnSwitch = true;
 
-  // Switches who starts first each round
+  // For switching who starts first each round
   let startSwitch = true;
 
   const board = [];
@@ -86,7 +86,7 @@ const displayController = ((
   }
 
   switchBtn.addEventListener('click', switchMarkers);
-  restartBtn.addEventListener('click', restartGame);
+  restartBtn.addEventListener('click', resetBoard);
 
   const setUpBoard = (function setUpBoard() {
     board.forEach((item, i) => {
@@ -197,7 +197,7 @@ const displayController = ((
     resultsDisplay.textContent = `${winner} wins`;
   }
 
-  function stopGame() {
+  function endRound() {
     gameContainer.classList.add('fade');
     setTimeout(() => postgameDisplay.classList.add('on'), 100);
   }
@@ -211,14 +211,14 @@ const displayController = ((
 
     if (winner) {
       displayWinner(winner);
-      stopGame();
+      endRound();
       return;
     }
 
     switchTurn();
   }
 
-  function restartGame() {
+  function resetBoard() {
     postgameDisplay.classList.remove('on');
     gameContainer.classList.remove('fade');
 
@@ -254,6 +254,8 @@ const displayController = ((
 // Add win tracker
 
 // Include grid size adjuster
+
+// Fix mobile view, update current turn styling, button styling,
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.

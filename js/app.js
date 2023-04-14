@@ -67,6 +67,11 @@ const gameBoard = (boardSizeString => {
     return (+boardSize.match(/^\d/)) ** 2;
   }
 
+  // I can simply export boardCells, but with the function below I return a reference
+  // meaning that while the boardCells array can be mutated, boardCells will not stop
+  // referencing it (i.e. boardCells as a variable is protected). This way we ensure
+  // we at least always have a reference to the array, even if it gets mutated.
+
   function getBoardState() {
     return boardCells;
   }
@@ -106,6 +111,7 @@ const displayController = ((
     switchBtn,
     postgameDisplay,
   },
+  gameBoard,
   playerOne,
   playerTwo
 ) => {
@@ -291,7 +297,7 @@ const displayController = ((
   }
 
   return { onClick };
-})(DOMobj, playerOne, playerTwo);
+})(DOMobj, gameBoard, playerOne, playerTwo);
 
 // TODO:
 

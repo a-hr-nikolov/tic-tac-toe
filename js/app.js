@@ -1,9 +1,6 @@
 import { DOMobj } from './DOM.js';
 import { initGameBoard } from './gameBoard.js';
-
-function createPlayer(name, marker) {
-  return { name, marker };
-}
+import { createPlayer } from './createPlayer.js';
 
 const gameBoard = initGameBoard('3x3');
 

@@ -1,6 +1,7 @@
 import { DOMobj } from './DOM.js';
 import { initGameBoard } from './gameBoard.js';
 import { createPlayer } from './createPlayer.js';
+import { setUpBoard } from './setUpBoard.js';
 
 const {
   gameContainer,
@@ -21,27 +22,18 @@ let turnSwitch = true;
 // For switching who starts first each round
 let startSwitch = true;
 
-const board = [];
-
+const boardUI = [];
 for (let i = 0; i < gameBoard.getGridSize(); i++) {
-  board[i] = document.createElement('div');
-  board[i].setAttribute('data-index', `${i}`);
-  board[i].addEventListener('click', handleCellClick);
-  gameContainer.appendChild(board[i]);
+  boardUI[i] = document.createElement('div');
+  boardUI[i].setAttribute('data-index', `${i}`);
+  boardUI[i].addEventListener('click', handleCellClick);
+  gameContainer.appendChild(boardUI[i]);
 }
 
 switchBtn.addEventListener('click', switchMarkers);
 restartBtn.addEventListener('click', resetBoard);
 
-const setUpBoard = (function setUpBoard() {
-  board.forEach((item, i) => {
-    item.className = 'cell';
-    item.setAttribute('data-marked', 'unmarked');
-    gameBoard.setBoardCell(i, 'unmarked');
-  });
-
-  return setUpBoard;
-})();
+setUpBoard(boardUI, gameBoard);
 
 function placeMarker({ target }) {
   let marker = null;
@@ -51,8 +43,8 @@ function placeMarker({ target }) {
   const cellIndex = +target.getAttribute('data-index');
 
   // Updates display
-  board[cellIndex].classList.add(marker);
-  board[cellIndex].setAttribute('data-marked', marker);
+  boardUI[cellIndex].classList.add(marker);
+  boardUI[cellIndex].setAttribute('data-marked', marker);
 
   // Updates state, possibly should be abstracted in another function
   gameBoard.setBoardCell(cellIndex, marker);
@@ -170,7 +162,7 @@ function resetBoard() {
   if (startSwitch === turnSwitch) switchTurn();
   startSwitch = !startSwitch;
 
-  setUpBoard();
+  setUpBoard(boardUI, gameBoard);
 }
 
 function switchMarkers() {

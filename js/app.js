@@ -1,32 +1,4 @@
-/* 
-
-The code below can hardly be considered beautiful, and I wouldn't call it clean either.
-That being said, I've kept it as is, because that was the assignment: to use the module
-pattern and factory functions to code this game. I would much prefer to use actual ES6
-modules, and make my code prettier, but on the other hand, I also want to have this as
-a snapshot of how my skills have changed throughout time.
-
-*/
-
-const DOMobj = (function () {
-  const gameContainer = document.querySelector('.game-container');
-  const postgameDisplay = document.querySelector('.post-game');
-  const resultsDisplay = document.querySelector('.results');
-  const playerMarkers = document.querySelectorAll('.player-marker');
-  const restartBtn = document.querySelector('.restart');
-  const switchBtn = document.querySelector('.switch');
-
-  gameContainer.style.height = getComputedStyle(gameContainer).width;
-
-  return {
-    gameContainer,
-    resultsDisplay,
-    restartBtn,
-    playerMarkers,
-    switchBtn,
-    postgameDisplay,
-  };
-})();
+import { DOMobj } from './DOM.js';
 
 const gameBoard = (gridSizeString => {
   let boardState = [];

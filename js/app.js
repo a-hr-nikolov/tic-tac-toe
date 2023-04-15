@@ -1,30 +1,11 @@
 import { DOMobj } from './DOM.js';
-
-const gameBoard = (gridSizeString => {
-  let boardState = [];
-
-  function calcGridSize() {
-    return (+gridSizeString.match(/^\d/)) ** 2;
-  }
-
-  function getBoardState() {
-    return [...boardState];
-  }
-
-  function getGridSize() {
-    return calcGridSize();
-  }
-
-  function setBoardCell(index, marker) {
-    boardState[index] = marker;
-  }
-
-  return { getBoardState, getGridSize, setBoardCell };
-})('3x3');
+import { initGameBoard } from './gameBoard.js';
 
 function createPlayer(name, marker) {
   return { name, marker };
 }
+
+const gameBoard = initGameBoard('3x3');
 
 const playerOne = createPlayer('Player 1', 'x');
 const playerTwo = createPlayer('Player 2', 'o');

@@ -1,4 +1,4 @@
-export function setUpBoard(boardUI, gameBoard) {
+export function setUpBoardUI(boardUI, gameBoard) {
   boardUI.forEach((item, i) => {
     item.className = 'cell';
     item.setAttribute('data-marked', 'unmarked');

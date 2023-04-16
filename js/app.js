@@ -9,7 +9,7 @@ const {
   resultsDisplay,
   restartBtn,
   playerMarkers,
-  switchBtn,
+  swapBtn,
   postgameDisplay,
 } = DOMobj;
 
@@ -34,8 +34,9 @@ for (let i = 0; i < gameBoard.getGridSize(); i++) {
   gameContainer.appendChild(boardUI[i]);
 }
 
-switchBtn.addEventListener('click', swapPlayerMarkers);
+swapBtn.addEventListener('click', swapPlayerMarkers);
 restartBtn.addEventListener('click', resetBoard);
+gameContainer.addEventListener('click', hideSwapButton, { once: true });
 
 initLogicAndUI(boardUI, gameBoard.setBoardCell);
 
@@ -99,6 +100,8 @@ function resetBoard() {
   whoGoesFirstSwitch = !whoGoesFirstSwitch;
 
   initLogicAndUI(boardUI, gameBoard.setBoardCell);
+  swapBtn.classList.remove('hidden');
+  gameContainer.addEventListener('click', hideSwapButton, { once: true });
 }
 
 function switchTurn() {
@@ -115,6 +118,10 @@ function swapPlayerMarkers() {
   let temp = playerOne.marker;
   playerOne.marker = playerTwo.marker;
   playerTwo.marker = temp;
+}
+
+function hideSwapButton() {
+  swapBtn.classList.add('hidden');
 }
 
 // TODO:

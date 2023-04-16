@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 .fade {
   pointer-events: none;
   opacity: 0.1;

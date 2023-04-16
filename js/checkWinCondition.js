@@ -1,5 +1,4 @@
-export function checkWinCondition(currentBoardState) {
-  const boardState = currentBoardState;
+export function checkWinCondition(boardState) {
   const trackSize = Math.sqrt(boardState.length);
 
   // Check rows

@@ -1,7 +1,7 @@
 import { DOMobj } from './DOM.js';
 import { initGameBoard } from './gameBoard.js';
 import { createPlayer } from './createPlayer.js';
-import { setUpBoardUI } from './setUpBoardUI.js';
+import { setUpBoardStateAndUI } from './setUpBoardStateAndUI.js';
 import { checkWinCondition } from './checkWinCondition.js';
 
 const {
@@ -37,7 +37,7 @@ for (let i = 0; i < gameBoard.getGridSize(); i++) {
 switchBtn.addEventListener('click', switchMarkers);
 restartBtn.addEventListener('click', resetBoard);
 
-setUpBoardUI(boardUI, gameBoard);
+setUpBoardStateAndUI(boardUI, gameBoard);
 
 // Functions
 
@@ -98,7 +98,7 @@ function resetBoard() {
   if (startSwitch === turnSwitch) switchTurn();
   startSwitch = !startSwitch;
 
-  setUpBoardUI(boardUI, gameBoard);
+  setUpBoardStateAndUI(boardUI, gameBoard);
 }
 
 function switchMarkers() {
@@ -119,7 +119,7 @@ function switchTurn() {
 
 // TODO:
 
-// Refactor setUpBoardUI - it shouldn't set up gameboard logic; Perhaps create a function that sets both
+// Refactor setUpBoardStateAndUI - it shouldn't set up gameboard logic; Perhaps create a function that sets both
 // game board and UI, but decouple it from knowing implementation details of gameBoard.
 
 // Figure out how to turn marker switcher when the game has already started. Maybe reset everything?

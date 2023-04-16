@@ -1,7 +1,7 @@
 import { DOMobj } from './DOM.js';
 import { initGameBoard } from './gameBoard.js';
 import { createPlayer } from './createPlayer.js';
-import { setUpBoardStateAndUI } from './setUpBoardStateAndUI.js';
+import { initLogicAndUI } from './initLogicAndUI.js';
 import { checkWinCondition } from './checkWinCondition.js';
 
 const {
@@ -23,8 +23,8 @@ const playerTwo = createPlayer('Player 2', 'o');
 // For switching turns on every click
 let turnSwitch = true;
 
-// For switching who starts first each round
-let startSwitch = true;
+// Switches each round
+let whoGoesFirstSwitch = true;
 
 const boardUI = [];
 for (let i = 0; i < gameBoard.getGridSize(); i++) {
@@ -34,10 +34,10 @@ for (let i = 0; i < gameBoard.getGridSize(); i++) {
   gameContainer.appendChild(boardUI[i]);
 }
 
-switchBtn.addEventListener('click', switchMarkers);
+switchBtn.addEventListener('click', swapPlayerMarkers);
 restartBtn.addEventListener('click', resetBoard);
 
-setUpBoardStateAndUI(boardUI, gameBoard.setBoardCell);
+initLogicAndUI(boardUI, gameBoard.setBoardCell);
 
 // Functions
 
@@ -95,13 +95,18 @@ function resetBoard() {
   postgameDisplay.classList.remove('on');
   gameContainer.classList.remove('fade');
 
-  if (startSwitch === turnSwitch) switchTurn();
-  startSwitch = !startSwitch;
+  if (whoGoesFirstSwitch === turnSwitch) switchTurn();
+  whoGoesFirstSwitch = !whoGoesFirstSwitch;
 
-  setUpBoardStateAndUI(boardUI, gameBoard.setBoardCell);
+  initLogicAndUI(boardUI, gameBoard.setBoardCell);
 }
 
-function switchMarkers() {
+function switchTurn() {
+  turnSwitch = !turnSwitch;
+  playerMarkers.forEach(item => item.classList.toggle('turn'));
+}
+
+function swapPlayerMarkers() {
   playerMarkers.forEach(item => {
     item.classList.toggle(playerOne.marker);
     item.classList.toggle(playerTwo.marker);
@@ -112,19 +117,11 @@ function switchMarkers() {
   playerTwo.marker = temp;
 }
 
-function switchTurn() {
-  turnSwitch = !turnSwitch;
-  playerMarkers.forEach(item => item.classList.toggle('turn'));
-}
-
 // TODO:
-
-// Refactor setUpBoardStateAndUI - it shouldn't set up gameboard logic; Perhaps create a function that sets both
-// game board and UI, but decouple it from knowing implementation details of gameBoard.
 
 // Figure out how to turn marker switcher when the game has already started. Maybe reset everything?
 
-// Make sure the switch symbols button disappears on first input
+// Make sure the swap player markers button disappears on first input
 
 // Add win tracker
 

@@ -13,6 +13,9 @@ const {
   postgameDisplay,
 } = DOMobj;
 
+// Initial board logic and UI setup, nothing here should be run more than once.
+// Can eventually be refactored to allow for grid size adjustment.
+
 const gameBoard = initGameBoard('3x3');
 const playerOne = createPlayer('Player 1', 'x');
 const playerTwo = createPlayer('Player 2', 'o');
@@ -36,39 +39,7 @@ restartBtn.addEventListener('click', resetBoard);
 
 setUpBoardUI(boardUI, gameBoard);
 
-function placeMarker({ target }) {
-  let marker = null;
-  if (turnSwitch) marker = playerOne.marker;
-  else marker = playerTwo.marker;
-
-  const cellIndex = +target.getAttribute('data-index');
-
-  // Updates display
-  boardUI[cellIndex].classList.add(marker);
-  boardUI[cellIndex].setAttribute('data-marked', marker);
-
-  // Updates state, possibly should be abstracted in another function
-  gameBoard.setBoardCell(cellIndex, marker);
-}
-
-function displayWinner(winningMarker) {
-  if (!winningMarker) return;
-  if (winningMarker === 'draw') {
-    resultsDisplay.textContent = "It's a draw";
-    return;
-  }
-
-  let winner = null;
-  if (winningMarker === playerOne.marker) winner = playerOne.name;
-  if (winningMarker === playerTwo.marker) winner = playerTwo.name;
-
-  resultsDisplay.textContent = `${winner} wins`;
-}
-
-function endRound() {
-  gameContainer.classList.add('fade');
-  setTimeout(() => postgameDisplay.classList.add('on'), 100);
-}
+// Functions
 
 function handleCellClick(event) {
   if (event.target.getAttribute('data-marked') !== 'unmarked') return;
@@ -86,6 +57,40 @@ function handleCellClick(event) {
   switchTurn();
 }
 
+function placeMarker({ target }) {
+  let marker = null;
+  if (turnSwitch) marker = playerOne.marker;
+  else marker = playerTwo.marker;
+
+  // Updates display
+  target.classList.add(marker);
+  target.setAttribute('data-marked', marker);
+
+  // Updates state
+  const cellIndex = +target.getAttribute('data-index');
+  gameBoard.setBoardCell(cellIndex, marker);
+}
+
+function displayWinner(winningMarker) {
+  if (!winningMarker) return;
+
+  if (winningMarker === 'draw') {
+    resultsDisplay.textContent = "It's a draw";
+    return;
+  }
+
+  let winner = null;
+  if (winningMarker === playerOne.marker) winner = playerOne.name;
+  if (winningMarker === playerTwo.marker) winner = playerTwo.name;
+
+  resultsDisplay.textContent = `${winner} wins`;
+}
+
+function endRound() {
+  gameContainer.classList.add('fade');
+  setTimeout(() => postgameDisplay.classList.add('on'), 100);
+}
+
 function resetBoard() {
   postgameDisplay.classList.remove('on');
   gameContainer.classList.remove('fade');
@@ -98,8 +103,8 @@ function resetBoard() {
 
 function switchMarkers() {
   playerMarkers.forEach(item => {
-    item.classList.toggle('o');
-    item.classList.toggle('x');
+    item.classList.toggle(playerOne.marker);
+    item.classList.toggle(playerTwo.marker);
   });
 
   let temp = playerOne.marker;

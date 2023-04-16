@@ -37,7 +37,7 @@ for (let i = 0; i < gameBoard.getGridSize(); i++) {
 switchBtn.addEventListener('click', switchMarkers);
 restartBtn.addEventListener('click', resetBoard);
 
-setUpBoardStateAndUI(boardUI, gameBoard);
+setUpBoardStateAndUI(boardUI, gameBoard.setBoardCell);
 
 // Functions
 
@@ -98,7 +98,7 @@ function resetBoard() {
   if (startSwitch === turnSwitch) switchTurn();
   startSwitch = !startSwitch;
 
-  setUpBoardStateAndUI(boardUI, gameBoard);
+  setUpBoardStateAndUI(boardUI, gameBoard.setBoardCell);
 }
 
 function switchMarkers() {

@@ -1,3 +1,4 @@
 export function createPlayer(name, marker) {
-  return { name, marker };
+  const wins = 0;
+  return { name, marker, wins };
 }

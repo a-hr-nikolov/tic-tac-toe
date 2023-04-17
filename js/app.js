@@ -126,10 +126,6 @@ function hideSwapButton() {
 
 // TODO:
 
-// Figure out how to turn marker switcher when the game has already started. Maybe reset everything?
-
-// Make sure the swap player markers button disappears on first input
-
 // Add win tracker
 
 // Include grid size adjuster

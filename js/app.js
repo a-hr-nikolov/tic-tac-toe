@@ -44,6 +44,19 @@ initLogicAndUI(boardUI, gameBoard.setBoardCell);
 
 // Functions
 
+/*
+
+Most of the functions break the single responsibility principle, and they are not pure
+either. That being said, I think their functionality is clear and further abstraction
+will rather confuse things. I may be wrong, but that's my current reasoning.
+
+Also, it is rather arbitrary what functions I've decided to abstract into their own
+files. I could have abstracted them all, and might do that at some point. The functions
+that remain here are those that most depend on the 'global' state and in their current
+form are not exactly reusable and modular. 
+
+*/
+
 function handleCellClick(event) {
   if (event.target.getAttribute('data-marked') !== 'unmarked') return;
 
@@ -73,32 +86,6 @@ function placeMarker({ target }) {
   const cellIndex = +target.getAttribute('data-index');
   gameBoard.setBoardCell(cellIndex, marker);
 }
-
-// function displayWinner(winningMarker) {
-//   if (!winningMarker) return;
-
-//   if (winningMarker === 'draw') {
-//     resultsDisplay.textContent = "It's a draw";
-//     return;
-//   }
-
-//   let winner = null;
-//   if (winningMarker === playerOne.marker) winner = playerOne.name;
-//   if (winningMarker === playerTwo.marker) winner = playerTwo.name;
-
-//   resultsDisplay.textContent = `${winner} wins`;
-// }
-
-// function changeWinState(marker) {
-//   if (marker === playerOne.marker) {
-//     playerOne.incrementWin();
-//     p1WinDisplay.textContent = playerOne.getWins();
-//   }
-//   if (marker === playerTwo.marker) {
-//     playerTwo.incrementWin();
-//     p2WinDisplay.textContent = playerTwo.getWins();
-//   }
-// }
 
 function handleWin(winningMarker) {
   if (!winningMarker) return;

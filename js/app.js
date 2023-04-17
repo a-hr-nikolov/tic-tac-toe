@@ -11,6 +11,8 @@ const {
   playerMarkers,
   swapBtn,
   postgameDisplay,
+  p1WinDisplay,
+  p2WinDisplay,
 } = DOMobj;
 
 // Initial board logic and UI setup, nothing here should be run more than once.
@@ -50,7 +52,7 @@ function handleCellClick(event) {
   const winner = checkWinCondition(gameBoard.getBoardState());
 
   if (winner) {
-    displayWinner(winner);
+    handleWin(winner);
     endRound();
     return;
   }
@@ -72,7 +74,33 @@ function placeMarker({ target }) {
   gameBoard.setBoardCell(cellIndex, marker);
 }
 
-function displayWinner(winningMarker) {
+// function displayWinner(winningMarker) {
+//   if (!winningMarker) return;
+
+//   if (winningMarker === 'draw') {
+//     resultsDisplay.textContent = "It's a draw";
+//     return;
+//   }
+
+//   let winner = null;
+//   if (winningMarker === playerOne.marker) winner = playerOne.name;
+//   if (winningMarker === playerTwo.marker) winner = playerTwo.name;
+
+//   resultsDisplay.textContent = `${winner} wins`;
+// }
+
+// function changeWinState(marker) {
+//   if (marker === playerOne.marker) {
+//     playerOne.incrementWin();
+//     p1WinDisplay.textContent = playerOne.getWins();
+//   }
+//   if (marker === playerTwo.marker) {
+//     playerTwo.incrementWin();
+//     p2WinDisplay.textContent = playerTwo.getWins();
+//   }
+// }
+
+function handleWin(winningMarker) {
   if (!winningMarker) return;
 
   if (winningMarker === 'draw') {
@@ -81,8 +109,16 @@ function displayWinner(winningMarker) {
   }
 
   let winner = null;
-  if (winningMarker === playerOne.marker) winner = playerOne.name;
-  if (winningMarker === playerTwo.marker) winner = playerTwo.name;
+  if (winningMarker === playerOne.marker) {
+    winner = playerOne.name;
+    playerOne.incrementWin();
+    p1WinDisplay.textContent = playerOne.getWins();
+  }
+  if (winningMarker === playerTwo.marker) {
+    winner = playerTwo.name;
+    playerTwo.incrementWin();
+    p2WinDisplay.textContent = playerTwo.getWins();
+  }
 
   resultsDisplay.textContent = `${winner} wins`;
 }
@@ -125,8 +161,6 @@ function hideSwapButton() {
 }
 
 // TODO:
-
-// Add win tracker
 
 // Include grid size adjuster
 

@@ -74,21 +74,36 @@ h2 {
 
 .control-container {
   display: flex;
+  width: min(50vh, 90%);
+  justify-content: space-between;
+  padding: 1vmin;
+  gap: 1rem;
 }
 
 .player {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 3rem;
 }
 
 .player-marker {
   display: grid;
   place-items: center;
-  height: 3vmin;
-  width: 3vmin;
-  font-size: 2rem;
+  height: min(4rem, 10vmin);
+  width: min(4rem, 10vmin);
+  font-size: min(3.5rem, 9vmin);
+}
+
+.swap {
+  align-self: center;
+  flex: 0 1 0;
+
+  padding: min(1rem, 4vmin) min(3rem, 6vmin);
+  border: none;
+  border-radius: min(1rem, 2vmin);
+  background-color: #ffaebc;
+
+  font-size: calc(1rem + 0.5vmin);
 }
 
 .turn {
@@ -106,7 +121,7 @@ h2 {
   font-weight: 700;
 }
 
-.restart:active {
+button:active {
   scale: 1.05;
 }
 
@@ -129,12 +144,6 @@ h2 {
   font-size: 1rem;
 }
 
-@media (hover: hover) {
-  .restart:hover {
-    filter: brightness(1.1);
-  }
-}
-
 .o::before {
   content: 'O';
 }
@@ -144,4 +153,10 @@ h2 {
 }
 
 .results {
+}
+
+@media (hover: hover) {
+  button:hover {
+    filter: brightness(1.1);
+  }
 }

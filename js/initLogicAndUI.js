@@ -8,7 +8,6 @@ I think it is worth it to keep the code concise and clear.
 export function initLogicAndUI(boardUI, setCellState) {
   boardUI.forEach((item, i) => {
     item.className = 'cell';
-    item.setAttribute('data-marked', 'unmarked');
     setCellState(i, 'unmarked');
   });
 }

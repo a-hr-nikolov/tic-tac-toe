@@ -5,7 +5,7 @@ import { initLogicAndUI } from './initLogicAndUI.js';
 import { checkWinCondition } from './checkWinCondition.js';
 
 const {
-  gameContainer,
+  boardUIContainer,
   resultsDisplay,
   restartBtn,
   playerMarkers,
@@ -31,14 +31,13 @@ let whoGoesFirstSwitch = true;
 const boardUI = [];
 for (let i = 0; i < gameBoard.getGridSize(); i++) {
   boardUI[i] = document.createElement('div');
-  boardUI[i].setAttribute('data-index', `${i}`);
   boardUI[i].addEventListener('click', handleCellClick);
-  gameContainer.appendChild(boardUI[i]);
+  boardUIContainer.appendChild(boardUI[i]);
 }
 
 swapBtn.addEventListener('click', swapPlayerMarkers);
 restartBtn.addEventListener('click', resetBoard);
-gameContainer.addEventListener('click', hideSwapButton, { once: true });
+boardUIContainer.addEventListener('click', hideSwapButton, { once: true });
 
 initLogicAndUI(boardUI, gameBoard.setBoardCell);
 
@@ -50,15 +49,11 @@ Most of the functions break the single responsibility principle, and they are no
 either. That being said, I think their functionality is clear and further abstraction
 will rather confuse things. I may be wrong, but that's my current reasoning.
 
-Also, it is rather arbitrary what functions I've decided to abstract into their own
-files. I could have abstracted them all, and might do that at some point. The functions
-that remain here are those that most depend on the 'global' state and in their current
-form are not exactly reusable and modular. 
-
 */
 
 function handleCellClick(event) {
-  if (event.target.getAttribute('data-marked') !== 'unmarked') return;
+  const index = getIndexOfCell(event.target);
+  if (gameBoard.getBoardState()[index] !== 'unmarked') return;
 
   putMarker(event.target);
 
@@ -73,7 +68,9 @@ function handleCellClick(event) {
   switchTurn();
 }
 
-function getActivePlayer() {}
+function getIndexOfCell(target) {
+  return [...boardUIContainer.children].indexOf(target);
+}
 
 function putMarker(target) {
   let marker = null;
@@ -86,12 +83,11 @@ function putMarker(target) {
 
 function updateBoardUI(target, marker) {
   target.classList.add(marker);
-  target.setAttribute('data-marked', marker);
 }
 
 function updateCellState(target, marker) {
-  const cellIndex = +target.getAttribute('data-index');
-  gameBoard.setBoardCell(cellIndex, marker);
+  const index = getIndexOfCell(target);
+  gameBoard.setBoardCell(index, marker);
 }
 
 function handleWin(winningMarker) {
@@ -118,20 +114,20 @@ function handleWin(winningMarker) {
 }
 
 function endRound() {
-  gameContainer.classList.add('fade');
+  boardUIContainer.classList.add('fade');
   setTimeout(() => postgameDisplay.classList.add('on'), 100);
 }
 
 function resetBoard() {
   postgameDisplay.classList.remove('on');
-  gameContainer.classList.remove('fade');
+  boardUIContainer.classList.remove('fade');
 
   if (whoGoesFirstSwitch === turnSwitch) switchTurn();
   whoGoesFirstSwitch = !whoGoesFirstSwitch;
 
   initLogicAndUI(boardUI, gameBoard.setBoardCell);
   swapBtn.classList.remove('hidden');
-  gameContainer.addEventListener('click', hideSwapButton, { once: true });
+  boardUIContainer.addEventListener('click', hideSwapButton, { once: true });
 }
 
 function switchTurn() {

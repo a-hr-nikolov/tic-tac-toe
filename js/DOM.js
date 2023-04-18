@@ -9,7 +9,7 @@ const p2WinDisplay = document.querySelector('#p2wins');
 
 boardUIContainer.style.height = getComputedStyle(boardUIContainer).width;
 
-export const DOMobj = {
+export const DOM = {
   boardUIContainer,
   resultsDisplay,
   restartBtn,

@@ -1,19 +1,8 @@
-import { DOMobj } from './DOM.js';
+import { DOM } from './DOM.js';
 import { initGameBoard } from './gameBoard.js';
 import { createPlayer } from './createPlayer.js';
 import { initLogicAndUI } from './initLogicAndUI.js';
 import { checkWinCondition } from './checkWinCondition.js';
-
-const {
-  boardUIContainer,
-  resultsDisplay,
-  restartBtn,
-  playerMarkers,
-  swapBtn,
-  postgameDisplay,
-  p1WinDisplay,
-  p2WinDisplay,
-} = DOMobj;
 
 // Initial board logic and UI setup, nothing here should be run more than once.
 // Can eventually be refactored to allow for grid size adjustment.
@@ -32,12 +21,12 @@ const boardUI = [];
 for (let i = 0; i < gameBoard.getGridSize(); i++) {
   boardUI[i] = document.createElement('div');
   boardUI[i].addEventListener('click', handleCellClick);
-  boardUIContainer.appendChild(boardUI[i]);
+  DOM.boardUIContainer.appendChild(boardUI[i]);
 }
 
-swapBtn.addEventListener('click', swapPlayerMarkers);
-restartBtn.addEventListener('click', resetBoard);
-boardUIContainer.addEventListener('click', hideSwapButton, { once: true });
+DOM.swapBtn.addEventListener('click', swapPlayerMarkers);
+DOM.restartBtn.addEventListener('click', resetBoard);
+DOM.boardUIContainer.addEventListener('click', hideSwapButton, { once: true });
 
 initLogicAndUI(boardUI, gameBoard.setBoardCell);
 
@@ -69,7 +58,7 @@ function handleCellClick(event) {
 }
 
 function getIndexOfCell(target) {
-  return [...boardUIContainer.children].indexOf(target);
+  return [...DOM.boardUIContainer.children].indexOf(target);
 }
 
 function putMarker(target) {
@@ -94,7 +83,7 @@ function handleWin(winningMarker) {
   if (!winningMarker) return;
 
   if (winningMarker === 'draw') {
-    resultsDisplay.textContent = "It's a draw";
+    DOM.resultsDisplay.textContent = "It's a draw";
     return;
   }
 
@@ -102,37 +91,39 @@ function handleWin(winningMarker) {
   if (winningMarker === playerOne.marker) {
     winner = playerOne.name;
     playerOne.incrementWin();
-    p1WinDisplay.textContent = playerOne.getWins();
+    DOM.p1WinDisplay.textContent = playerOne.getWins();
   }
   if (winningMarker === playerTwo.marker) {
     winner = playerTwo.name;
     playerTwo.incrementWin();
-    p2WinDisplay.textContent = playerTwo.getWins();
+    DOM.p2WinDisplay.textContent = playerTwo.getWins();
   }
 
-  resultsDisplay.textContent = `${winner} wins`;
+  DOM.resultsDisplay.textContent = `${winner} wins`;
 }
 
 function endRound() {
-  boardUIContainer.classList.add('fade');
-  setTimeout(() => postgameDisplay.classList.add('on'), 100);
+  DOM.boardUIContainer.classList.add('fade');
+  setTimeout(() => DOM.postgameDisplay.classList.add('on'), 100);
 }
 
 function resetBoard() {
-  postgameDisplay.classList.remove('on');
-  boardUIContainer.classList.remove('fade');
+  DOM.postgameDisplay.classList.remove('on');
+  DOM.boardUIContainer.classList.remove('fade');
 
   if (whoGoesFirstSwitch === turnSwitch) switchTurn();
   whoGoesFirstSwitch = !whoGoesFirstSwitch;
 
   initLogicAndUI(boardUI, gameBoard.setBoardCell);
-  swapBtn.classList.remove('hidden');
-  boardUIContainer.addEventListener('click', hideSwapButton, { once: true });
+  DOM.swapBtn.classList.remove('hidden');
+  DOM.boardUIContainer.addEventListener('click', hideSwapButton, {
+    once: true,
+  });
 }
 
 function switchTurn() {
   turnSwitch = !turnSwitch;
-  playerMarkers.forEach(item => item.classList.toggle('turn'));
+  DOM.playerMarkers.forEach(item => item.classList.toggle('turn'));
 }
 
 function swapPlayerMarkers() {
@@ -147,17 +138,21 @@ function swapPlayerMarkerState() {
 }
 
 function swapPlayerMarkerDisplay() {
-  playerMarkers.forEach(item => {
+  DOM.playerMarkers.forEach(item => {
     item.classList.toggle(playerOne.marker);
     item.classList.toggle(playerTwo.marker);
   });
 }
 
 function hideSwapButton() {
-  swapBtn.classList.add('hidden');
+  DOM.swapBtn.classList.add('hidden');
 }
 
 // TODO:
+
+// Currently 'x' and 'o' are hardcoded. I need to decouple them from how the logic works.
+// My logic shouldn't depend on what the player markers are per se, but right now it does.
+// It depends on them being 'x' and 'o' precisely.
 
 // Include grid size adjuster
 

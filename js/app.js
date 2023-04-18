@@ -1,5 +1,5 @@
 import { DOM } from './DOM.js';
-import { initGameBoard } from './gameBoard.js';
+import { GameBoard } from './gameBoard.js';
 import { createPlayer } from './createPlayer.js';
 import { initLogicAndUI } from './initLogicAndUI.js';
 import { checkWinCondition } from './checkWinCondition.js';
@@ -7,7 +7,7 @@ import { checkWinCondition } from './checkWinCondition.js';
 // Initial board logic and UI setup, nothing here should be run more than once.
 // Can eventually be refactored to allow for grid size adjustment.
 
-const gameBoard = initGameBoard('3x3');
+const gameBoard = new GameBoard('3x3');
 const playerOne = createPlayer('Player 1', 'x');
 const playerTwo = createPlayer('Player 2', 'o');
 

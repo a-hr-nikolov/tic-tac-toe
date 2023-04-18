@@ -60,7 +60,7 @@ form are not exactly reusable and modular.
 function handleCellClick(event) {
   if (event.target.getAttribute('data-marked') !== 'unmarked') return;
 
-  putMarker(event.target, marker);
+  putMarker(event.target);
 
   const winner = checkWinCondition(gameBoard.getBoardState());
 
@@ -72,6 +72,8 @@ function handleCellClick(event) {
 
   switchTurn();
 }
+
+function getActivePlayer() {}
 
 function putMarker(target) {
   let marker = null;
@@ -138,14 +140,21 @@ function switchTurn() {
 }
 
 function swapPlayerMarkers() {
+  swapPlayerMarkerState();
+  swapPlayerMarkerDisplay();
+}
+
+function swapPlayerMarkerState() {
+  let temp = playerOne.marker;
+  playerOne.marker = playerTwo.marker;
+  playerTwo.marker = temp;
+}
+
+function swapPlayerMarkerDisplay() {
   playerMarkers.forEach(item => {
     item.classList.toggle(playerOne.marker);
     item.classList.toggle(playerTwo.marker);
   });
-
-  let temp = playerOne.marker;
-  playerOne.marker = playerTwo.marker;
-  playerTwo.marker = temp;
 }
 
 function hideSwapButton() {

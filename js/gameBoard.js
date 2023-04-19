@@ -1,8 +1,9 @@
 /*
 
 Below I have two ways of implementing the creation of a new game board. Initially,
-I was using the factory function, but decided to switch to a class later on. I still
-wanted to keep the factory function though, just to keep it as a history artifact.
+I was using the factory function, but decided to switch to a class later on. However,
+a class isn't really necessary here, and both can be used easily. So I defaulted back
+to a factory function.
 
 */
 
@@ -27,19 +28,15 @@ export class GameBoard {
   };
 }
 
-export const initGameBoard = gridSizeString => {
+export const createGameBoard = gridSizeString => {
   let boardState = [];
-
-  function calcGridSize() {
-    return (+gridSizeString.match(/^\d/)) ** 2;
-  }
 
   function getBoardState() {
     return [...boardState];
   }
 
   function getGridSize() {
-    return calcGridSize();
+    return (+gridSizeString.match(/^\d/)) ** 2;
   }
 
   function setBoardCell(index, marker) {

@@ -80,7 +80,10 @@ function putMarker(target, index, marker) {
 function handleWin(winningMarker) {
   if (!winningMarker) return;
 
-  if (winningMarker === 'draw') {
+  if (
+    winningMarker !== playerOne.marker &&
+    winningMarker !== playerTwo.marker
+  ) {
     DOM.resultsDisplay.textContent = "It's a draw";
     return;
   }

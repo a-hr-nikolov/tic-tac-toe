@@ -47,16 +47,11 @@ did that, it lead to over-fragmentation, at least it looked that way to me.
 
 function handleCellClick(event) {
   const index = event.target.getAttribute('data-index');
-  let marker = null;
 
   // Guard clause to prevent from cells being overwritten
   if (gameBoard.getBoardState()[index] !== 'unmarked') return;
 
-  if (turnSwitch) marker = playerOne.marker;
-  else marker = playerTwo.marker;
-
-  gameBoard.setBoardCell(index, marker);
-  placeMarkerOnBoardUI(event.target, marker);
+  putMarker(event.target, index, getMarker());
 
   const winner = checkWinCondition(gameBoard.getBoardState());
 
@@ -69,7 +64,16 @@ function handleCellClick(event) {
   switchTurn();
 }
 
-function placeMarkerOnBoardUI(target, marker) {
+function getMarker() {
+  if (turnSwitch) return playerOne.marker;
+  else return playerTwo.marker;
+}
+
+function putMarker(target, index, marker) {
+  // Puts marker in internal state object
+  gameBoard.setBoardCell(index, marker);
+
+  // Puts marker on board UI
   target.classList.add(marker);
 }
 

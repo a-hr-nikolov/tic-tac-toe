@@ -21,6 +21,7 @@ const boardUI = [];
 for (let i = 0; i < gameBoard.getGridSize(); i++) {
   boardUI[i] = document.createElement('div');
   boardUI[i].addEventListener('click', handleCellClick);
+  boardUI[i].setAttribute('data-index', i);
   DOM.boardUIContainer.appendChild(boardUI[i]);
 }
 
@@ -38,13 +39,24 @@ Most of the functions break the single responsibility principle, and they are no
 either. That being said, I think their functionality is clear and further abstraction
 will rather confuse things. I may be wrong, but that's my current reasoning.
 
+The handleCellClick function most definitely breaks the single responsibility principle.
+I figured I can abstract the functionality into separate smaller functions, but when I
+did that, it lead to over-fragmentation, at least it looked that way to me. 
+
 */
 
 function handleCellClick(event) {
-  const index = getIndexOfCell(event.target);
+  const index = event.target.getAttribute('data-index');
+  let marker = null;
+
+  // Guard clause to prevent from cells being overwritten
   if (gameBoard.getBoardState()[index] !== 'unmarked') return;
 
-  putMarker(event.target);
+  if (turnSwitch) marker = playerOne.marker;
+  else marker = playerTwo.marker;
+
+  gameBoard.setBoardCell(index, marker);
+  placeMarkerOnBoardUI(event.target, marker);
 
   const winner = checkWinCondition(gameBoard.getBoardState());
 
@@ -57,26 +69,8 @@ function handleCellClick(event) {
   switchTurn();
 }
 
-function getIndexOfCell(target) {
-  return [...DOM.boardUIContainer.children].indexOf(target);
-}
-
-function putMarker(target) {
-  let marker = null;
-  if (turnSwitch) marker = playerOne.marker;
-  else marker = playerTwo.marker;
-
-  updateBoardUI(target, marker);
-  updateCellState(target, marker);
-}
-
-function updateBoardUI(target, marker) {
+function placeMarkerOnBoardUI(target, marker) {
   target.classList.add(marker);
-}
-
-function updateCellState(target, marker) {
-  const index = getIndexOfCell(target);
-  gameBoard.setBoardCell(index, marker);
 }
 
 function handleWin(winningMarker) {

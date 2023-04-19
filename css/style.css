@@ -91,7 +91,7 @@ h2 {
   place-items: center;
   height: min(4rem, 10vmin);
   width: min(4rem, 10vmin);
-  font-size: min(3.5rem, 9vmin);
+  font-size: min(3rem, 8vmin);
 }
 
 .swap {
@@ -107,7 +107,8 @@ h2 {
 }
 
 .turn {
-  background-color: white;
+  background-color: rgb(255, 255, 125);
+  border-radius: 100px;
 }
 
 .restart {
@@ -117,8 +118,11 @@ h2 {
 
   background-color: #ffaebc;
   font-size: inherit;
-  font-family: inherit;
   font-weight: 700;
+}
+
+button {
+  font-family: inherit;
 }
 
 button:active {
@@ -150,9 +154,6 @@ button:active {
 
 .x::before {
   content: 'X';
-}
-
-.results {
 }
 
 @media (hover: hover) {

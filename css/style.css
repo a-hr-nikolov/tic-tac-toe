@@ -156,6 +156,11 @@ button:active {
   content: 'X';
 }
 
+.max-content {
+  width: max-content;
+  display: block;
+}
+
 @media (hover: hover) {
   button:hover {
     filter: brightness(1.1);

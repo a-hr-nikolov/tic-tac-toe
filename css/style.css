@@ -161,6 +161,18 @@ button:active {
   display: block;
 }
 
+.signature {
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  color: black;
+}
+
+a {
+  text-decoration: none;
+  color: blue;
+}
+
 @media (hover: hover) {
   button:hover {
     filter: brightness(1.1);

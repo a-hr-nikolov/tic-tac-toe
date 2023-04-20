@@ -39,10 +39,6 @@ Most of the functions break the single responsibility principle, and they are no
 either. That being said, I think their functionality is clear and further abstraction
 will rather confuse things. I may be wrong, but that's my current reasoning.
 
-The handleCellClick function most definitely breaks the single responsibility principle.
-I figured I can abstract the functionality into separate smaller functions, but when I
-did that, it lead to over-fragmentation, at least it looked that way to me. 
-
 */
 
 function handleCellClick(event) {
@@ -128,17 +124,12 @@ function switchTurn() {
 }
 
 function swapPlayerMarkers() {
-  swapPlayerMarkerState();
-  swapPlayerMarkerDisplay();
-}
-
-function swapPlayerMarkerState() {
+  // Updates state
   let temp = playerOne.marker;
   playerOne.marker = playerTwo.marker;
   playerTwo.marker = temp;
-}
 
-function swapPlayerMarkerDisplay() {
+  // Updates UI
   DOM.playerMarkers.forEach(item => {
     item.classList.toggle(playerOne.marker);
     item.classList.toggle(playerTwo.marker);
@@ -156,8 +147,6 @@ function hideSwapButton() {
 // It depends on them being 'x' and 'o' precisely.
 
 // Include grid size adjuster
-
-// Fix mobile view, update current turn styling, button styling,
 
 /* Optional - If you’re feeling ambitious create an AI so that a player can play against the computer!
 Start by just getting the computer to make a random legal move.
